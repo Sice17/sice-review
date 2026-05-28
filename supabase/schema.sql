@@ -44,7 +44,7 @@ CREATE TABLE transactions (
   contractor_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   customer_name TEXT,
   customer_phone TEXT NOT NULL,
-  token TEXT NOT NULL UNIQUE DEFAULT encode(gen_random_bytes(24), 'base64url'),
+  token TEXT NOT NULL UNIQUE DEFAULT replace(replace(encode(gen_random_bytes(24), 'base64'), '+', '-'), '/', '_'),
   status transaction_status NOT NULL DEFAULT 'sent',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

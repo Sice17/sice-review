@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,14 +15,25 @@ import {
 } from "@/components/ui/card";
 import { isValidSwedishPhone } from "@/lib/utils";
 
+async function parseJsonResponse(res: Response) {
+  const text = await res.text();
+  if (!text) {
+    return {};
+  }
+  try {
+    return JSON.parse(text) as { success?: boolean; error?: string };
+  } catch {
+    throw new Error(text.slice(0, 200) || "Ogiltigt svar från servern");
+  }
+}
+
 export function QuickSendForm() {
+  const router = useRouter();
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-
+  async function sendReview() {
     if (!isValidSwedishPhone(customerPhone)) {
       toast.error("Ange ett giltigt svenskt mobilnummer (07x eller +46)");
       return;
@@ -38,18 +50,20 @@ export function QuickSendForm() {
         }),
       });
 
-      const data = await res.json();
+      const data = await parseJsonResponse(res);
 
-      if (!res.ok) {
+      if (!res.ok || data.success === false) {
         throw new Error(data.error ?? "Något gick fel");
       }
 
       toast.success("SMS skickat!");
       setCustomerPhone("");
       setCustomerName("");
-      window.location.reload();
+      router.refresh();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Kunde inte skicka SMS");
+      const message =
+        err instanceof Error ? err.message : "Kunde inte skicka SMS";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -64,11 +78,18 @@ export function QuickSendForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:flex-row sm:items-end">
+        <form
+          className="flex flex-col gap-4 sm:flex-row sm:items-end"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void sendReview();
+          }}
+        >
           <div className="flex-1 space-y-2">
             <Label htmlFor="customerPhone">Telefonnummer *</Label>
             <Input
               id="customerPhone"
+              name="customerPhone"
               type="tel"
               placeholder="070-123 45 67"
               value={customerPhone}
@@ -80,6 +101,7 @@ export function QuickSendForm() {
             <Label htmlFor="customerName">Kundnamn (valfritt)</Label>
             <Input
               id="customerName"
+              name="customerName"
               type="text"
               placeholder="Anna Andersson"
               value={customerName}

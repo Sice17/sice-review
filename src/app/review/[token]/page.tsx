@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
 import { ReviewForm } from "@/components/ReviewForm";
 import { Star } from "lucide-react";
@@ -23,7 +21,7 @@ async function submitFeedback(formData: FormData) {
 
   const { data: transaction } = await supabase
     .from("transactions")
-    .select("id, status")
+    .select("id, status, contractor_id")
     .eq("id", transactionId)
     .single();
 
@@ -50,8 +48,20 @@ async function submitFeedback(formData: FormData) {
     .update({ status: "completed" })
     .eq("id", transactionId);
 
-  revalidatePath(`/review`);
-  redirect(`/review/thanks`);
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("google_review_url")
+    .eq("id", transaction.contractor_id)
+    .maybeSingle();
+
+  return {
+    submitted: true,
+    rating,
+    googleReviewUrl:
+      (profile as { google_review_url?: string | null } | null)
+        ?.google_review_url ?? null,
+    transactionId,
+  };
 }
 
 export default async function ReviewPage({ params }: ReviewPageProps) {
@@ -102,7 +112,7 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("company_name")
+    .select("company_name, google_review_url")
     .eq("id", transaction.contractor_id)
     .single();
 

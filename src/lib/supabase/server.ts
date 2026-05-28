@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+import type { Profile } from "@/lib/supabase/types";
 
 export async function createClient() {
   const cookieStore = await cookies();
@@ -39,3 +40,5 @@ export async function createServiceClient() {
     }
   );
 }
+
+export type ProfileRow = Profile;

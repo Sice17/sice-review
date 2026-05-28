@@ -1,14 +1,23 @@
 import twilio from "twilio";
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const fromNumber = process.env.TWILIO_PHONE_NUMBER;
+function getTwilioConfig() {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const fromNumber = process.env.TWILIO_PHONE_NUMBER;
 
-function getClient() {
   if (!accountSid || !authToken) {
-    throw new Error("Twilio credentials are not configured");
+    throw new Error(
+      "Twilio credentials saknas. Kontrollera TWILIO_ACCOUNT_SID och TWILIO_AUTH_TOKEN i .env.local"
+    );
   }
-  return twilio(accountSid, authToken);
+
+  if (!fromNumber) {
+    throw new Error(
+      "Twilio avsändarnummer saknas. Kontrollera TWILIO_PHONE_NUMBER i .env.local"
+    );
+  }
+
+  return { accountSid, authToken, fromNumber };
 }
 
 export async function sendReviewSMS({
@@ -22,15 +31,17 @@ export async function sendReviewSMS({
   companyName: string;
   reviewUrl: string;
 }) {
+  const { accountSid, authToken, fromNumber } = getTwilioConfig();
+
   const body = customerName
     ? `Hej ${customerName}! Tack för att du anlitade ${companyName}. Vi uppskattar om du tar 30 sekunder och delar din upplevelse: ${reviewUrl} 🙏`
     : `Hej! Tack för att du anlitade ${companyName}. Dela gärna din upplevelse här: ${reviewUrl} 🙏`;
 
-  const client = getClient();
+  const client = twilio(accountSid, authToken);
 
   await client.messages.create({
     body,
-    from: fromNumber!,
+    from: fromNumber,
     to,
   });
 }

@@ -1,13 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Star } from "lucide-react";
 import { StarRating } from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
+type SubmitResult = {
+  error?: string;
+  submitted?: boolean;
+  rating?: number;
+  googleReviewUrl?: string | null;
+  transactionId?: string;
+};
+
 interface ReviewFormProps {
   transactionId: string;
-  submitAction: (formData: FormData) => Promise<{ error?: string }>;
+  submitAction: (formData: FormData) => Promise<SubmitResult>;
 }
 
 export function ReviewForm({ transactionId, submitAction }: ReviewFormProps) {
@@ -15,6 +25,25 @@ export function ReviewForm({ transactionId, submitAction }: ReviewFormProps) {
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<SubmitResult | null>(null);
+
+  useEffect(() => {
+    if (!result?.submitted || !result.transactionId || !result.rating) {
+      return;
+    }
+    if (result.rating >= 4) {
+      return;
+    }
+
+    void fetch("/api/notify-bad-review", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        transaction_id: result.transactionId,
+        rating: result.rating,
+      }),
+    });
+  }, [result]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,7 +64,48 @@ export function ReviewForm({ transactionId, submitAction }: ReviewFormProps) {
     if (result.error) {
       setError(result.error);
       setLoading(false);
+      return;
     }
+    setResult(result);
+    setLoading(false);
+  }
+
+  if (result?.submitted && result.rating) {
+    if (result.rating >= 4) {
+      return (
+        <div className="rounded-xl border bg-card p-6 text-center">
+          <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+            <Star className="size-6 fill-amber-400 text-amber-400" />
+          </div>
+          <h2 className="text-xl font-semibold">Vad kul! Tack för ditt omdöme!</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Om du vill får du gärna dela samma upplevelse publikt på Google.
+          </p>
+          {result.googleReviewUrl ? (
+            <Button asChild className="mt-5">
+              <Link href={result.googleReviewUrl} target="_blank" rel="noreferrer">
+                Lämna recension på Google
+              </Link>
+            </Button>
+          ) : (
+            <p className="mt-4 text-sm text-muted-foreground">
+              Google-länk saknas för detta företag.
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <div className="rounded-xl border bg-card p-6 text-center">
+        <h2 className="text-xl font-semibold">
+          Tack för din feedback. Vi tar dina synpunkter på allvar.
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Din återkoppling har skickats privat till företaget.
+        </p>
+      </div>
+    );
   }
 
   return (

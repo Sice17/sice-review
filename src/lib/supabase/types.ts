@@ -3,6 +3,7 @@ export type TransactionStatus = "sent" | "opened" | "completed";
 export interface Profile {
   id: string;
   company_name: string;
+  google_review_url: string | null;
   phone: string | null;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
@@ -49,6 +50,7 @@ export interface Database {
         Insert: {
           id: string;
           company_name?: string;
+          google_review_url?: string | null;
           phone?: string | null;
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
@@ -58,6 +60,7 @@ export interface Database {
         };
         Update: {
           company_name?: string;
+          google_review_url?: string | null;
           phone?: string | null;
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardNav } from "@/components/DashboardNav";
+import { hasActiveSubscription } from "@/lib/admin";
 
 export default async function DashboardLayout({
   children,
@@ -23,7 +24,10 @@ export default async function DashboardLayout({
     .eq("id", user.id)
     .single();
 
-  const isActive = profile?.stripe_subscription_status === "active";
+  const isActive = hasActiveSubscription(
+    user.id,
+    profile?.stripe_subscription_status
+  );
 
   return (
     <div className="flex min-h-full flex-col">
