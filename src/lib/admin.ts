@@ -1,3 +1,5 @@
+// Admin helper - updated
+
 export function getAdminUserIds(): string[] {
   const raw = process.env.NEXT_PUBLIC_ADMIN_USER_IDS;
   if (!raw) {
