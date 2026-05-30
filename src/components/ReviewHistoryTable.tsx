@@ -20,7 +20,8 @@ const PAGE_SIZE = 10;
 const statusLabels: Record<string, string> = {
   sent: "Skickad",
   opened: "Öppnad",
-  completed: "Klar",
+  completed: "Slutförd",
+  reminded: "Påminnelse skickad",
 };
 
 const statusVariant: Record<
@@ -30,6 +31,7 @@ const statusVariant: Record<
   sent: "secondary",
   opened: "default",
   completed: "default",
+  reminded: "default",
 };
 
 interface ReviewHistoryTableProps {
@@ -122,7 +124,9 @@ export function ReviewHistoryTable({ transactions }: ReviewHistoryTableProps) {
                           ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
                           : tx.status === "opened"
                             ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100"
-                            : ""
+                            : tx.status === "reminded"
+                              ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100"
+                              : ""
                       }
                     >
                       {statusLabels[tx.status] ?? tx.status}

@@ -45,3 +45,29 @@ export async function sendReviewSMS({
     to,
   });
 }
+
+export async function sendReminderSMS({
+  to,
+  customerName,
+  companyName,
+  reviewUrl,
+}: {
+  to: string;
+  customerName?: string | null;
+  companyName: string;
+  reviewUrl: string;
+}) {
+  const { accountSid, authToken, fromNumber } = getTwilioConfig();
+
+  const body = customerName
+    ? `Hej ${customerName}! Vi vill påminna om att ${companyName} gärna vill höra din upplevelse 🙏 Det tar bara 30 sekunder: ${reviewUrl}`
+    : `Hej! Vi vill påminna om att ${companyName} gärna vill höra din upplevelse 🙏 Det tar bara 30 sekunder: ${reviewUrl}`;
+
+  const client = twilio(accountSid, authToken);
+
+  await client.messages.create({
+    body,
+    from: fromNumber,
+    to,
+  });
+}

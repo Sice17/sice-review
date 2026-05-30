@@ -36,7 +36,7 @@ CREATE TRIGGER on_auth_user_created
   EXECUTE FUNCTION handle_new_user();
 
 -- Transaction status enum
-CREATE TYPE transaction_status AS ENUM ('sent', 'opened', 'completed');
+CREATE TYPE transaction_status AS ENUM ('sent', 'opened', 'completed', 'reminded');
 
 -- Transactions
 CREATE TABLE transactions (

@@ -1,4 +1,8 @@
-export type TransactionStatus = "sent" | "opened" | "completed";
+export type TransactionStatus =
+  | "sent"
+  | "opened"
+  | "completed"
+  | "reminded";
 
 export interface Profile {
   id: string;
