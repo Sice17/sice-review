@@ -12,6 +12,7 @@ import { BillingButtons } from "@/components/BillingButtons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { WidgetEmbed } from "@/components/WidgetEmbed";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -101,6 +102,19 @@ export default async function SettingsPage() {
             </div>
             <Button type="submit">Spara</Button>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recensionswidget</CardTitle>
+          <CardDescription>
+            Klistra in denna kod på din hemsida för att visa dina bästa
+            recensioner automatiskt.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <WidgetEmbed companyId={user!.id} />
         </CardContent>
       </Card>
     </div>
