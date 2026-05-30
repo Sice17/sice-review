@@ -27,23 +27,33 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-1">
-        <section className="mx-auto max-w-6xl px-4 py-20 text-center md:py-28">
-          <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-            Fler recensioner. Mer förtroende. Mer jobb.
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            SICE Review hjälper hantverkare och serviceföretag att samla in
-            äkta kundomdömen via SMS — på under 10 sekunder. Varje kund får en
-            unik länk, du ser allt i din dashboard.
-          </p>
-          <Button size="lg" className="mt-8" asChild>
-            <Link href="/auth/register">Kom igång gratis</Link>
-          </Button>
+        <section className="relative overflow-hidden">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(37,99,235,0.15) 0%, transparent 70%)",
+            }}
+          />
+          <div className="relative mx-auto max-w-6xl px-4 py-20 text-center md:py-28">
+            <h1 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
+              Fler recensioner. Mer förtroende. Mer jobb.
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+              SICE Review hjälper hantverkare och serviceföretag att samla in
+              äkta kundomdömen via SMS — på under 10 sekunder. Varje kund får en
+              unik länk, du ser allt i din dashboard.
+            </p>
+            <Button size="lg" className="mt-8" asChild>
+              <Link href="/auth/register">Kom igång gratis</Link>
+            </Button>
+          </div>
         </section>
 
-        <section className="border-t bg-muted/30 py-16">
+        <section className="border-t border-[#2a2a2a] py-16">
           <div className="mx-auto grid max-w-6xl gap-6 px-4 md:grid-cols-3">
-            <Card>
+            <Card className="transition-colors hover:bg-[#222222]">
               <CardHeader>
                 <MessageSquare className="size-8 text-primary mb-2" />
                 <CardTitle>Skicka SMS på 10 sekunder</CardTitle>
@@ -53,7 +63,7 @@ export default function LandingPage() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="transition-colors hover:bg-[#222222]">
               <CardHeader>
                 <Link2 className="size-8 text-primary mb-2" />
                 <CardTitle>Unikt recensionslänk</CardTitle>
@@ -63,7 +73,7 @@ export default function LandingPage() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="transition-colors hover:bg-[#222222]">
               <CardHeader>
                 <LayoutDashboard className="size-8 text-primary mb-2" />
                 <CardTitle>Se allt i din dashboard</CardTitle>
@@ -78,23 +88,31 @@ export default function LandingPage() {
 
         <section className="py-16">
           <div className="mx-auto max-w-md px-4">
-            <Card className="border-2 border-primary/20">
+            <Card className="border-t-4 border-t-primary">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">Professionell</CardTitle>
                 <CardDescription>Allt du behöver för att samla recensioner</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 text-center">
-                <p className="text-4xl font-bold">
+                <p className="text-4xl font-bold text-foreground">
                   799 kr
                   <span className="text-base font-normal text-muted-foreground">
                     /mån ex. moms
                   </span>
                 </p>
                 <ul className="space-y-2 text-left text-sm text-muted-foreground">
-                  <li>✓ Obegränsade SMS-förfrågningar</li>
-                  <li>✓ Unika recensionslänkar per kund</li>
-                  <li>✓ Dashboard med statistik</li>
-                  <li>✓ Stripe-fakturering &amp; kundportal</li>
+                  <li>
+                    <span className="text-primary">✓</span> Obegränsade SMS-förfrågningar
+                  </li>
+                  <li>
+                    <span className="text-primary">✓</span> Unika recensionslänkar per kund
+                  </li>
+                  <li>
+                    <span className="text-primary">✓</span> Dashboard med statistik
+                  </li>
+                  <li>
+                    <span className="text-primary">✓</span> Stripe-fakturering &amp; kundportal
+                  </li>
                 </ul>
                 <Button className="w-full" asChild>
                   <Link href="/auth/register">Kom igång</Link>
@@ -105,7 +123,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t py-8 text-center text-sm text-muted-foreground">
+      <footer className="border-t border-[#2a2a2a] py-8 text-center text-sm text-muted-foreground">
         <p>© {new Date().getFullYear()} SICE Review. Alla rättigheter förbehållna.</p>
       </footer>
     </div>

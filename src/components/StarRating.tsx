@@ -37,8 +37,8 @@ export function StarRating({ value, onChange, readonly = false }: StarRatingProp
             className={cn(
               "size-8",
               star <= display
-                ? "fill-amber-400 text-amber-400"
-                : "fill-transparent text-muted-foreground"
+                ? "fill-[#f59e0b] text-[#f59e0b]"
+                : "fill-transparent text-[#374151]"
             )}
           />
         </button>

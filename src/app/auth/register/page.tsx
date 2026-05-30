@@ -48,8 +48,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-full items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-full flex-col items-center justify-center px-4 py-12">
+      <span className="mb-6 text-2xl font-bold tracking-tight text-foreground">
+        SICE Review
+      </span>
+      <Card className="w-full max-w-md rounded-xl shadow-lg">
         <CardHeader>
           <CardTitle>Skapa konto</CardTitle>
           <CardDescription>Starta din provperiod med SICE Review</CardDescription>

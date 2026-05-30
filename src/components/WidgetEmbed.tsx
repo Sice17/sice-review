@@ -26,7 +26,7 @@ export function WidgetEmbed({ companyId }: WidgetEmbedProps) {
 
   return (
     <div className="space-y-3">
-      <pre className="overflow-x-auto rounded-lg border bg-muted p-3 text-xs leading-relaxed text-foreground">
+      <pre className="overflow-x-auto rounded-lg border border-[#2a2a2a] bg-[#111111] p-3 font-mono text-xs leading-relaxed text-[#94a3b8]">
         <code>{embedCode}</code>
       </pre>
       <Button

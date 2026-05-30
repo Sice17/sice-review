@@ -108,7 +108,11 @@ export function QuickSendForm() {
               onChange={(e) => setCustomerName(e.target.value)}
             />
           </div>
-          <Button type="submit" disabled={loading} className="sm:mb-0.5">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full sm:mb-0.5 sm:w-auto"
+          >
             {loading ? "Skickar…" : "Skicka SMS"}
           </Button>
         </form>

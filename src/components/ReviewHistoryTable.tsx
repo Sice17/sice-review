@@ -80,14 +80,14 @@ export function ReviewHistoryTable({ transactions }: ReviewHistoryTableProps) {
     <div className="overflow-x-auto rounded-lg border">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="bg-[#222222] hover:bg-[#222222]">
             <TableHead className="w-8" />
-            <TableHead>Datum</TableHead>
+            <TableHead className="hidden sm:table-cell">Datum</TableHead>
             <TableHead>Kund</TableHead>
-            <TableHead>Telefon</TableHead>
+            <TableHead className="hidden sm:table-cell">Telefon</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Betyg</TableHead>
-            <TableHead>Kommentar</TableHead>
+            <TableHead className="hidden sm:table-cell">Kommentar</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -98,7 +98,7 @@ export function ReviewHistoryTable({ transactions }: ReviewHistoryTableProps) {
               <Fragment key={tx.id}>
                 <TableRow
                   aria-expanded={isExpanded}
-                  className="cursor-pointer"
+                  className="cursor-pointer hover:bg-[#222222]"
                   onClick={() => toggleRow(tx.id)}
                 >
                   <TableCell className="w-8 pr-0">
@@ -109,11 +109,11 @@ export function ReviewHistoryTable({ transactions }: ReviewHistoryTableProps) {
                       )}
                     />
                   </TableCell>
-                  <TableCell className="whitespace-nowrap">
+                  <TableCell className="hidden whitespace-nowrap sm:table-cell">
                     {formatDate(tx.created_at)}
                   </TableCell>
                   <TableCell>{tx.customer_name ?? "—"}</TableCell>
-                  <TableCell className="whitespace-nowrap">
+                  <TableCell className="hidden whitespace-nowrap sm:table-cell">
                     {tx.customer_phone}
                   </TableCell>
                   <TableCell>
@@ -121,11 +121,11 @@ export function ReviewHistoryTable({ transactions }: ReviewHistoryTableProps) {
                       variant={statusVariant[tx.status] ?? "secondary"}
                       className={
                         tx.status === "completed"
-                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+                          ? "bg-[#052e16] text-[#16a34a]"
                           : tx.status === "opened"
-                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100"
+                            ? "bg-[#0c1f3d] text-[#60a5fa]"
                             : tx.status === "reminded"
-                              ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100"
+                              ? "bg-[#2e1f05] text-[#f59e0b]"
                               : ""
                       }
                     >
@@ -142,7 +142,7 @@ export function ReviewHistoryTable({ transactions }: ReviewHistoryTableProps) {
                       "—"
                     )}
                   </TableCell>
-                  <TableCell className="max-w-[200px] truncate whitespace-normal sm:whitespace-nowrap">
+                  <TableCell className="hidden max-w-[200px] truncate sm:table-cell sm:whitespace-nowrap">
                     {tx.feedback?.comment ?? "—"}
                   </TableCell>
                 </TableRow>
