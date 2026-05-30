@@ -13,6 +13,7 @@ type SubmitResult = {
   rating?: number;
   googleReviewUrl?: string | null;
   transactionId?: string;
+  comment?: string | null;
 };
 
 interface ReviewFormProps {
@@ -31,7 +32,17 @@ export function ReviewForm({ transactionId, submitAction }: ReviewFormProps) {
     if (!result?.submitted || !result.transactionId || !result.rating) {
       return;
     }
+
     if (result.rating >= 4) {
+      void fetch("/api/notify-good-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          transactionId: result.transactionId,
+          rating: result.rating,
+          comment: result.comment ?? null,
+        }),
+      });
       return;
     }
 
@@ -66,7 +77,7 @@ export function ReviewForm({ transactionId, submitAction }: ReviewFormProps) {
       setLoading(false);
       return;
     }
-    setResult(result);
+    setResult({ ...result, comment: comment || null });
     setLoading(false);
   }
 
