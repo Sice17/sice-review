@@ -13,6 +13,7 @@ interface ProfileRow {
   id: string;
   company_name: string | null;
   stripe_subscription_status: string | null;
+  weekly_report_enabled: boolean | null;
 }
 
 interface FeedbackWithTransaction {
@@ -62,7 +63,8 @@ export async function GET(request: Request) {
 
   const { data: profileRows, error: profileError } = await supabase
     .from("profiles")
-    .select("id, company_name, stripe_subscription_status")
+    .select("id, company_name, stripe_subscription_status, weekly_report_enabled")
+    .eq("weekly_report_enabled", true)
     .or(orFilter);
 
   if (profileError) {

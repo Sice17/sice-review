@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { WidgetEmbed } from "@/components/WidgetEmbed";
+import { WeeklyReportToggle } from "@/components/WeeklyReportToggle";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -102,6 +103,20 @@ export default async function SettingsPage() {
             </div>
             <Button type="submit">Spara</Button>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Notiser</CardTitle>
+          <CardDescription>
+            Hantera vilka email du får från SICE Review.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <WeeklyReportToggle
+            initialEnabled={profile?.weekly_report_enabled ?? true}
+          />
         </CardContent>
       </Card>
 
