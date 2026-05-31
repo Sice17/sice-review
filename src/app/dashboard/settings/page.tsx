@@ -32,12 +32,18 @@ export default async function SettingsPage() {
 
   const statusBadge =
     subscriptionStatus === "active"
-      ? { label: "Aktiv", className: "bg-[#052e16] text-[#16a34a]" }
+      ? {
+          label: "Aktiv",
+          className: "bg-[#052e16] text-[#16a34a] border-[#16a34a]",
+        }
       : subscriptionStatus === "past_due"
-        ? { label: "Förfallen", className: "bg-[#2e0505] text-[#dc2626]" }
+        ? {
+            label: "Förfallen",
+            className: "bg-[#450a0a] text-[#dc2626] border-[#dc2626]",
+          }
         : {
-            label: subscriptionStatus ?? "Inaktiv",
-            className: "bg-secondary text-muted-foreground",
+            label: "Inaktiv",
+            className: "bg-[#1a1a1a] text-[#94a3b8] border-[#2a2a2a]",
           };
 
   async function saveGoogleReviewUrl(formData: FormData) {
@@ -81,7 +87,7 @@ export default async function SettingsPage() {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">Prenumeration</span>
-            <Badge variant="secondary" className={statusBadge.className}>
+            <Badge variant="outline" className={statusBadge.className}>
               {statusBadge.label}
             </Badge>
           </div>
