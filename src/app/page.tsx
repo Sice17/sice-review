@@ -27,7 +27,13 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-1">
-        <section className="relative overflow-hidden">
+        <section
+          className="relative overflow-hidden"
+          style={{
+            background:
+              "linear-gradient(135deg, #0f0f0f 0%, #0f172a 50%, #0f0f0f 100%)",
+          }}
+        >
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
@@ -37,15 +43,15 @@ export default function LandingPage() {
             }}
           />
           <div className="relative mx-auto max-w-6xl px-4 py-20 text-center md:py-28">
-            <h1 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
+            <h1 className="mx-auto max-w-3xl text-5xl font-bold tracking-tight text-foreground md:text-6xl">
               Fler recensioner. Mer förtroende. Mer jobb.
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
               SICE Review hjälper hantverkare och serviceföretag att samla in
               äkta kundomdömen via SMS — på under 10 sekunder. Varje kund får en
               unik länk, du ser allt i din dashboard.
             </p>
-            <Button size="lg" className="mt-8" asChild>
+            <Button size="lg" className="mt-8 rounded-full px-8 py-3" asChild>
               <Link href="/auth/register">Kom igång gratis</Link>
             </Button>
           </div>
