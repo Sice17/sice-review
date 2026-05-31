@@ -33,7 +33,7 @@ export function DashboardNav({ companyName }: DashboardNavProps) {
   }
 
   return (
-    <header className="border-b border-[#2a2a2a] bg-[#0f0f0f]">
+    <header className="border-b border-border bg-background">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <div className="flex items-center gap-6">
           <span className="font-bold text-foreground truncate max-w-[200px] sm:max-w-none">

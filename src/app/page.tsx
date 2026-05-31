@@ -27,13 +27,7 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-1">
-        <section
-          className="relative overflow-hidden"
-          style={{
-            background:
-              "linear-gradient(135deg, #0f0f0f 0%, #0f172a 50%, #0f0f0f 100%)",
-          }}
-        >
+        <section className="relative overflow-hidden bg-background">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
@@ -57,9 +51,9 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="border-t border-[#2a2a2a] py-16">
+        <section className="border-t border-border py-16">
           <div className="mx-auto grid max-w-6xl gap-6 px-4 md:grid-cols-3">
-            <Card className="transition-colors hover:bg-[#222222]">
+            <Card className="transition-colors hover:bg-muted">
               <CardHeader>
                 <MessageSquare className="size-8 text-primary mb-2" />
                 <CardTitle>Skicka SMS på 10 sekunder</CardTitle>
@@ -69,7 +63,7 @@ export default function LandingPage() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card className="transition-colors hover:bg-[#222222]">
+            <Card className="transition-colors hover:bg-muted">
               <CardHeader>
                 <Link2 className="size-8 text-primary mb-2" />
                 <CardTitle>Unikt recensionslänk</CardTitle>
@@ -79,7 +73,7 @@ export default function LandingPage() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card className="transition-colors hover:bg-[#222222]">
+            <Card className="transition-colors hover:bg-muted">
               <CardHeader>
                 <LayoutDashboard className="size-8 text-primary mb-2" />
                 <CardTitle>Se allt i din dashboard</CardTitle>
@@ -129,7 +123,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t border-[#2a2a2a] py-8 text-sm text-muted-foreground">
+      <footer className="border-t border-border py-8 text-sm text-muted-foreground">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-2 px-4 text-center sm:flex-row sm:gap-4">
           <p>© {new Date().getFullYear()} SICE Review. Alla rättigheter förbehållna.</p>
           <nav className="flex gap-4">
