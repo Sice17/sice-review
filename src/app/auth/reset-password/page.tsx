@@ -50,6 +50,12 @@ function ResetPasswordContent() {
     const tokenHash = searchParams.get("token_hash");
     const type = searchParams.get("type");
 
+    // If a session already exists (e.g. established server-side by
+    // /auth/callback), we're ready immediately.
+    void supabase.auth.getSession().then(({ data }) => {
+      if (data.session) succeed();
+    });
+
     if (tokenHash && type === "recovery") {
       // Format 2 — query param OTP
       void supabase.auth
