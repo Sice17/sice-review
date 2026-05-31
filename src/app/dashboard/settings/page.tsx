@@ -27,7 +27,18 @@ export default async function SettingsPage() {
     .eq("id", user!.id)
     .single();
 
-  const isActive = profile?.stripe_subscription_status === "active";
+  const subscriptionStatus = profile?.stripe_subscription_status ?? null;
+  const isActive = subscriptionStatus === "active";
+
+  const statusBadge =
+    subscriptionStatus === "active"
+      ? { label: "Aktiv", className: "bg-[#052e16] text-[#16a34a]" }
+      : subscriptionStatus === "past_due"
+        ? { label: "Förfallen", className: "bg-[#2e0505] text-[#dc2626]" }
+        : {
+            label: subscriptionStatus ?? "Inaktiv",
+            className: "bg-secondary text-muted-foreground",
+          };
 
   async function saveGoogleReviewUrl(formData: FormData) {
     "use server";
@@ -52,7 +63,7 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-lg">
+    <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Inställningar</h1>
         <p className="text-muted-foreground">Hantera din prenumeration</p>
@@ -70,8 +81,8 @@ export default async function SettingsPage() {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">Prenumeration</span>
-            <Badge variant={isActive ? "default" : "secondary"}>
-              {isActive ? "Aktiv" : profile?.stripe_subscription_status ?? "Inaktiv"}
+            <Badge variant="secondary" className={statusBadge.className}>
+              {statusBadge.label}
             </Badge>
           </div>
           <BillingButtons isActive={isActive} />
