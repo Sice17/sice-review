@@ -45,10 +45,11 @@ export default function TermsPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold">Betalningsvillkor</h2>
             <p className="text-muted-foreground">
-              Tjänsten kostar 799 kr/mån exklusive moms. Avgiften faktureras
-              månadsvis i förskott via vår betalningsleverantör Stripe. Det finns
-              ingen bindningstid — du betalar bara för de månader du använder
-              tjänsten.
+              Tjänsten kostar 1 199 kr/mån exklusive moms. Rabattkoder kan sänka
+              priset enligt vad som erbjuds vid tecknandet av prenumerationen.
+              Avgiften faktureras månadsvis i förskott via vår
+              betalningsleverantör Stripe. Det finns ingen bindningstid — du
+              betalar bara för de månader du använder tjänsten.
             </p>
           </section>
 
