@@ -31,7 +31,10 @@ export default async function SettingsPage() {
     .single();
 
   const subscriptionStatus = profile?.stripe_subscription_status ?? null;
-  const isActive = subscriptionStatus === "active";
+  const hasPlan =
+    subscriptionStatus === "active" ||
+    subscriptionStatus === "trialing" ||
+    subscriptionStatus === "past_due";
 
   const statusBadge =
     subscriptionStatus === "active"
@@ -39,15 +42,20 @@ export default async function SettingsPage() {
           label: "Aktiv",
           className: "bg-[#052e16] text-[#16a34a] border-[#16a34a]",
         }
-      : subscriptionStatus === "past_due"
+      : subscriptionStatus === "trialing"
         ? {
-            label: "Förfallen",
-            className: "bg-[#450a0a] text-[#dc2626] border-[#dc2626]",
+            label: "Provperiod aktiv",
+            className: "bg-[#0c1f3d] text-[#60a5fa] border-[#2563eb]",
           }
-        : {
-            label: "Inaktiv",
-            className: "bg-[#1a1a1a] text-[#94a3b8] border-[#2a2a2a]",
-          };
+        : subscriptionStatus === "past_due"
+          ? {
+              label: "Betalning misslyckades",
+              className: "bg-[#450a0a] text-[#dc2626] border-[#dc2626]",
+            }
+          : {
+              label: "Inaktiv",
+              className: "bg-[#1a1a1a] text-[#94a3b8] border-[#2a2a2a]",
+            };
 
   async function saveGoogleReviewUrl(formData: FormData) {
     "use server";
@@ -81,7 +89,11 @@ export default async function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Din plan</CardTitle>
-          <CardDescription>SICE Review — 799 kr/mån ex. moms</CardDescription>
+          {hasPlan && (
+            <CardDescription>
+              SICE Review — 1 199 kr/mån ex. moms
+            </CardDescription>
+          )}
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
@@ -94,7 +106,7 @@ export default async function SettingsPage() {
               {statusBadge.label}
             </Badge>
           </div>
-          <BillingButtons isActive={isActive} />
+          <BillingButtons status={subscriptionStatus} />
         </CardContent>
       </Card>
 
