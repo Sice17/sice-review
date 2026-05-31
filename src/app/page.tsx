@@ -43,7 +43,7 @@ export default function LandingPage() {
             }}
           />
           <div className="relative mx-auto max-w-6xl px-4 py-20 text-center md:py-28">
-            <h1 className="mx-auto max-w-3xl text-5xl font-bold tracking-tight text-foreground md:text-6xl">
+            <h1 className="mx-auto max-w-4xl text-balance text-5xl font-bold tracking-tight text-foreground md:text-6xl">
               Fler recensioner. Mer förtroende. Mer jobb.
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
