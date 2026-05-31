@@ -43,6 +43,15 @@ export default function RegisterPage() {
       return;
     }
 
+    // Fire-and-forget welcome email — don't block navigation on it
+    void fetch("/api/send-welcome-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, companyName }),
+    }).catch(() => {
+      // Welcome email failures shouldn't affect the signup flow
+    });
+
     router.push("/dashboard");
     router.refresh();
   }
