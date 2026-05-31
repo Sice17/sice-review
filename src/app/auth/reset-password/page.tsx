@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { Check, X, CheckCircle, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -21,43 +21,45 @@ import { createClient } from "@/lib/supabase/client";
 
 type Status = "verifying" | "ready" | "error";
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [status, setStatus] = useState<Status>("verifying");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
-  // The Supabase JS client automatically exchanges the recovery token in the
-  // URL hash for a session. onAuthStateChange fires PASSWORD_RECOVERY when that
-  // succeeds — that's our signal that the form is safe to show.
+  // Supabase email links use a query-param OTP flow:
+  // /auth/reset-password?token_hash=...&type=recovery
+  // We exchange that token for a session via verifyOtp on mount.
   useEffect(() => {
+    const tokenHash = searchParams.get("token_hash");
+    const type = searchParams.get("type");
+
+    if (type !== "recovery" || !tokenHash) {
+      setStatus("error");
+      return;
+    }
+
     const supabase = createClient();
-    let resolved = false;
+    let cancelled = false;
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "PASSWORD_RECOVERY" || (event === "SIGNED_IN" && session)) {
-        resolved = true;
+    void supabase.auth
+      .verifyOtp({ token_hash: tokenHash, type: "recovery" })
+      .then(({ error }) => {
+        if (cancelled) return;
+        if (error) {
+          setStatus("error");
+          return;
+        }
         setStatus("ready");
-      }
-    });
-
-    // If the recovery session hasn't been established within 3s, treat the
-    // link as invalid/expired.
-    const timeout = setTimeout(() => {
-      if (!resolved) {
-        setStatus((current) => (current === "ready" ? current : "error"));
-      }
-    }, 3000);
+      });
 
     return () => {
-      subscription.unsubscribe();
-      clearTimeout(timeout);
+      cancelled = true;
     };
-  }, []);
+  }, [searchParams]);
 
   const hasMinLength = password.length >= 8;
   const hasUppercase = /[A-ZÅÄÖ]/.test(password);
@@ -127,9 +129,7 @@ export default function ResetPasswordPage() {
         ) : status === "error" ? (
           <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
             <AlertCircle className="size-14 text-destructive" />
-            <h1 className="text-xl font-bold tracking-tight">
-              Ogiltig länk
-            </h1>
+            <h1 className="text-xl font-bold tracking-tight">Ogiltig länk</h1>
             <p className="text-sm text-muted-foreground">
               Ingen giltig återställningssession. Begär en ny
               återställningslänk.
@@ -198,6 +198,20 @@ export default function ResetPasswordPage() {
         )}
       </Card>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-full items-center justify-center px-4 py-12">
+          <Loader2 className="size-10 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
 
