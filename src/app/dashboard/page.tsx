@@ -10,6 +10,15 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("company_name")
+    .eq("id", user!.id)
+    .maybeSingle();
+
+  const companyName =
+    (profile as { company_name?: string } | null)?.company_name ?? "";
+
   const { data: rows } = await supabase
     .from("transactions")
     .select("*, feedback(*)")
@@ -33,7 +42,7 @@ export default async function DashboardPage() {
         </p>
       </div>
       <StatsCards transactions={transactions} />
-      <QuickSendForm />
+      <QuickSendForm companyName={companyName} />
       <div>
         <h2 className="mb-4 text-lg font-semibold">Historik</h2>
         <ReviewHistoryTable transactions={transactions} />

@@ -130,7 +130,7 @@ export function ReviewForm({ transactionId, submitAction }: ReviewFormProps) {
         <textarea
           id="comment"
           rows={4}
-          className="w-full rounded-lg border border-input bg-[#222222] px-3 py-2 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="w-full rounded-lg border border-input bg-secondary px-3 py-2 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           placeholder="Berätta gärna mer om din upplevelse…"
           value={comment}
           onChange={(e) => setComment(e.target.value)}

@@ -14,6 +14,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { WidgetEmbed } from "@/components/WidgetEmbed";
 import { WeeklyReportToggle } from "@/components/WeeklyReportToggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { ChangePasswordForm } from "@/components/ChangePasswordForm";
+import { DataManagement } from "@/components/DataManagement";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -125,6 +128,18 @@ export default async function SettingsPage() {
 
       <Card>
         <CardHeader>
+          <CardTitle>Utseende</CardTitle>
+          <CardDescription>
+            Anpassa hur SICE Review ser ut för dig.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ThemeToggle />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>Notiser</CardTitle>
           <CardDescription>
             Hantera vilka email du får från SICE Review.
@@ -139,6 +154,18 @@ export default async function SettingsPage() {
 
       <Card>
         <CardHeader>
+          <CardTitle>Säkerhet</CardTitle>
+          <CardDescription>
+            Uppdatera ditt lösenord för att hålla kontot säkert.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChangePasswordForm />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>Recensionswidget</CardTitle>
           <CardDescription>
             Klistra in denna kod på din hemsida för att visa dina bästa
@@ -147,6 +174,18 @@ export default async function SettingsPage() {
         </CardHeader>
         <CardContent>
           <WidgetEmbed companyId={user!.id} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Din data</CardTitle>
+          <CardDescription>
+            Exportera eller radera din data och ditt konto.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DataManagement />
         </CardContent>
       </Card>
     </div>

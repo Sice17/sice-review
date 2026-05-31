@@ -97,6 +97,23 @@ export default function RegisterPage() {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Skapar konto…" : "Registrera"}
             </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              Genom att registrera dig godkänner du våra{" "}
+              <Link
+                href="/terms"
+                className="text-primary underline-offset-4 hover:underline"
+              >
+                Användarvillkor
+              </Link>{" "}
+              och{" "}
+              <Link
+                href="/privacy"
+                className="text-primary underline-offset-4 hover:underline"
+              >
+                Integritetspolicy
+              </Link>
+              .
+            </p>
             <p className="text-sm text-muted-foreground text-center">
               Har du redan konto?{" "}
               <Link href="/auth/login" className="text-primary underline-offset-4 hover:underline">

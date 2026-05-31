@@ -80,7 +80,7 @@ export function ReviewHistoryTable({ transactions }: ReviewHistoryTableProps) {
     <div className="overflow-x-auto rounded-lg border">
       <Table>
         <TableHeader>
-          <TableRow className="bg-[#222222] hover:bg-[#222222]">
+          <TableRow className="bg-muted hover:bg-muted">
             <TableHead className="w-8" />
             <TableHead className="hidden sm:table-cell">Datum</TableHead>
             <TableHead>Kund</TableHead>
@@ -98,7 +98,7 @@ export function ReviewHistoryTable({ transactions }: ReviewHistoryTableProps) {
               <Fragment key={tx.id}>
                 <TableRow
                   aria-expanded={isExpanded}
-                  className="cursor-pointer hover:bg-[#222222]"
+                  className="cursor-pointer hover:bg-muted"
                   onClick={() => toggleRow(tx.id)}
                 >
                   <TableCell className="w-8 pr-0">

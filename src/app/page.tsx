@@ -101,7 +101,7 @@ export default function LandingPage() {
               </CardHeader>
               <CardContent className="space-y-4 text-center">
                 <p className="text-4xl font-bold text-foreground">
-                  799 kr
+                  1 199 kr
                   <span className="text-base font-normal text-muted-foreground">
                     /mån ex. moms
                   </span>
@@ -129,8 +129,24 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t border-[#2a2a2a] py-8 text-center text-sm text-muted-foreground">
-        <p>© {new Date().getFullYear()} SICE Review. Alla rättigheter förbehållna.</p>
+      <footer className="border-t border-[#2a2a2a] py-8 text-sm text-muted-foreground">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-2 px-4 text-center sm:flex-row sm:gap-4">
+          <p>© {new Date().getFullYear()} SICE Review. Alla rättigheter förbehållna.</p>
+          <nav className="flex gap-4">
+            <Link
+              href="/privacy"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Integritetspolicy
+            </Link>
+            <Link
+              href="/terms"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Användarvillkor
+            </Link>
+          </nav>
+        </div>
       </footer>
     </div>
   );

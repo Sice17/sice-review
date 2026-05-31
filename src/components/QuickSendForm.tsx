@@ -27,11 +27,19 @@ async function parseJsonResponse(res: Response) {
   }
 }
 
-export function QuickSendForm() {
+interface QuickSendFormProps {
+  companyName?: string;
+}
+
+export function QuickSendForm({ companyName }: QuickSendFormProps) {
   const router = useRouter();
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const previewName = customerName.trim() || "kunden";
+  const previewCompany = companyName?.trim() || "ditt företag";
+  const smsPreview = `Hej ${previewName}! Tack för att du anlitade ${previewCompany}. Vi uppskattar om du tar 30 sekunder och delar din upplevelse: https://sicereview.se/review/xxxx 🙏`;
 
   async function sendReview() {
     if (!isValidSwedishPhone(customerPhone)) {
@@ -116,6 +124,16 @@ export function QuickSendForm() {
             {loading ? "Skickar…" : "Skicka SMS"}
           </Button>
         </form>
+
+        <div className="mt-6 space-y-2">
+          <Label>Förhandsgranskning av SMS</Label>
+          <div className="max-w-md rounded-2xl rounded-bl-sm bg-[#2f2f2f] px-4 py-3 text-sm leading-relaxed text-white shadow-sm">
+            {smsPreview}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {smsPreview.length} tecken
+          </p>
+        </div>
       </CardContent>
     </Card>
   );

@@ -48,9 +48,46 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* SICE Review dark SaaS theme */
-:root,
+/* SICE Review — light theme (default tokens) */
+:root {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #2563eb;
+  --primary-foreground: #f8fafc;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #dc2626;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+  --chart-1: #2563eb;
+  --chart-2: #1d4ed8;
+  --chart-3: #60a5fa;
+  --chart-4: #94a3b8;
+  --chart-5: #64748b;
+  --radius: 0.625rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #2563eb;
+}
+
+/* SICE Review — dark SaaS theme */
 .dark {
+  color-scheme: dark;
   --background: #0f0f0f;
   --foreground: #f8fafc;
   --card: #1a1a1a;
@@ -74,7 +111,6 @@
   --chart-3: #60a5fa;
   --chart-4: #94a3b8;
   --chart-5: #64748b;
-  --radius: 0.625rem;
   --sidebar: #1a1a1a;
   --sidebar-foreground: #f8fafc;
   --sidebar-primary: #2563eb;
@@ -88,9 +124,6 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-  }
-  html {
-    color-scheme: dark;
   }
   body {
     @apply bg-background text-foreground;
@@ -109,9 +142,9 @@
     font-family: var(--font-geist-mono), ui-monospace, monospace;
   }
   /* Prevent light/yellow autofill backgrounds in dark inputs */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus {
+  .dark input:-webkit-autofill,
+  .dark input:-webkit-autofill:hover,
+  .dark input:-webkit-autofill:focus {
     -webkit-box-shadow: 0 0 0 30px #222222 inset;
     -webkit-text-fill-color: #f8fafc;
     caret-color: #f8fafc;
