@@ -27,9 +27,11 @@ export default function ResetPasswordPage() {
 
   // Supabase automatically parses the access token from the URL hash and
   // establishes a recovery session (detectSessionInUrl is enabled by default).
-  // Surface a friendly error if the link was invalid or already used.
+  // We call getSession() on mount to confirm the session was picked up, and
+  // surface a friendly error if the link was invalid or already used.
   useEffect(() => {
     if (typeof window === "undefined") return;
+
     const hash = window.location.hash;
     if (hash.includes("error")) {
       const params = new URLSearchParams(hash.replace(/^#/, ""));
@@ -39,7 +41,17 @@ export default function ResetPasswordPage() {
           ? decodeURIComponent(description.replace(/\+/g, " "))
           : "Återställningslänken är ogiltig eller har gått ut."
       );
+      return;
     }
+
+    const supabase = createClient();
+    void supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) {
+        toast.error(
+          "Ingen giltig återställningssession hittades. Begär en ny återställningslänk."
+        );
+      }
+    });
   }, []);
 
   const hasMinLength = password.length >= 8;
