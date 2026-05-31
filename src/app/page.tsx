@@ -12,7 +12,7 @@ import {
 export default function LandingPage() {
   return (
     <div className="flex min-h-full flex-col">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <span className="text-lg font-bold tracking-tight">SICE Review</span>
           <div className="flex gap-2">
@@ -27,7 +27,7 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-background">
+        <section className="relative overflow-hidden bg-background dark:bg-[linear-gradient(135deg,#0f0f0f_0%,#0f172a_50%,#0f0f0f_100%)]">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
