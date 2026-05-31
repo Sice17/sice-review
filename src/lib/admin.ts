@@ -24,5 +24,8 @@ export function hasActiveSubscription(
     return true;
   }
 
-  return stripeSubscriptionStatus === "active";
+  return (
+    stripeSubscriptionStatus === "active" ||
+    stripeSubscriptionStatus === "trialing"
+  );
 }
