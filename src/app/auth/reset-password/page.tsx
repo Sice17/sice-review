@@ -30,34 +30,52 @@ function ResetPasswordContent() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
-  // Supabase email links use a query-param OTP flow:
-  // /auth/reset-password?token_hash=...&type=recovery
-  // We exchange that token for a session via verifyOtp on mount.
+  // Supabase may send users here via two formats:
+  //   Query OTP: /auth/reset-password?token_hash=...&type=recovery
+  //   Hash:      /auth/reset-password#access_token=...&type=recovery
+  // We try the query flow first (verifyOtp); otherwise we wait for the client
+  // to auto-exchange the hash token and fire PASSWORD_RECOVERY.
   useEffect(() => {
+    const supabase = createClient();
+    let resolved = false;
+    let subscription: { unsubscribe: () => void } | undefined;
+
+    const succeed = () => {
+      if (!resolved) {
+        resolved = true;
+        setStatus("ready");
+      }
+    };
+
     const tokenHash = searchParams.get("token_hash");
     const type = searchParams.get("type");
 
-    if (type !== "recovery" || !tokenHash) {
-      setStatus("error");
-      return;
+    if (tokenHash && type === "recovery") {
+      // Format 2 — query param OTP
+      void supabase.auth
+        .verifyOtp({ token_hash: tokenHash, type: "recovery" })
+        .then(({ error }) => {
+          if (!error) succeed();
+        });
+    } else {
+      // Format 1 — hash token. The client auto-exchanges it and fires
+      // PASSWORD_RECOVERY (or SIGNED_IN with a session).
+      const { data } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === "PASSWORD_RECOVERY" || (event === "SIGNED_IN" && session)) {
+          succeed();
+        }
+      });
+      subscription = data.subscription;
     }
 
-    const supabase = createClient();
-    let cancelled = false;
-
-    void supabase.auth
-      .verifyOtp({ token_hash: tokenHash, type: "recovery" })
-      .then(({ error }) => {
-        if (cancelled) return;
-        if (error) {
-          setStatus("error");
-          return;
-        }
-        setStatus("ready");
-      });
+    // If neither method establishes a session within 5s, show the error state.
+    const timeout = setTimeout(() => {
+      if (!resolved) setStatus("error");
+    }, 5000);
 
     return () => {
-      cancelled = true;
+      subscription?.unsubscribe();
+      clearTimeout(timeout);
     };
   }, [searchParams]);
 
