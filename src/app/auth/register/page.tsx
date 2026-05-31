@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Check, X } from "lucide-react";
+import { Check, X, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,12 +19,12 @@ import {
 import { createClient } from "@/lib/supabase/client";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [companyName, setCompanyName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const hasMinLength = password.length >= 8;
   const hasUppercase = /[A-ZÅÄÖ]/.test(password);
@@ -64,7 +63,7 @@ export default function RegisterPage() {
       return;
     }
 
-    // Fire-and-forget welcome email — don't block navigation on it
+    // Fire-and-forget welcome email — don't block the success screen on it
     void fetch("/api/send-welcome-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -73,8 +72,38 @@ export default function RegisterPage() {
       // Welcome email failures shouldn't affect the signup flow
     });
 
-    router.push("/dashboard");
-    router.refresh();
+    // Show a confirmation screen — the user must confirm their email first.
+    // No redirect and no Stripe checkout here; subscriptions are started
+    // later from the settings page.
+    setSubmitted(true);
+    setLoading(false);
+  }
+
+  if (submitted) {
+    return (
+      <div className="flex min-h-full flex-col items-center justify-center px-4 py-12">
+        <span className="mb-6 text-2xl font-bold tracking-tight text-foreground">
+          SICE Review
+        </span>
+        <Card className="w-full max-w-md rounded-xl shadow-lg">
+          <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
+            <CheckCircle className="size-14 text-green-600 dark:text-green-500" />
+            <h1 className="text-xl font-bold tracking-tight">
+              Kolla din e-post! 📬
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Vi har skickat en bekräftelselänk till{" "}
+              <span className="font-medium text-foreground">{email}</span>.
+              Klicka på länken i mailet för att aktivera ditt konto och komma
+              igång.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Kom inte mailet fram? Kolla skräpposten.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (

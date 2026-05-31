@@ -34,7 +34,11 @@ export default function LoginPage() {
     });
 
     if (error) {
-      toast.error(error.message);
+      const message =
+        error.message === "Invalid login credentials"
+          ? "Felaktig e-post eller lösenord. Har du bekräftat din e-postadress?"
+          : error.message;
+      toast.error(message);
       setLoading(false);
       return;
     }
