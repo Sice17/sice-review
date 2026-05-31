@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { Check, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,10 +24,29 @@ export default function RegisterPage() {
   const [companyName, setCompanyName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const hasMinLength = password.length >= 8;
+  const hasUppercase = /[A-ZÅÄÖ]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const passwordValid = hasMinLength && hasUppercase && hasNumber;
+  const passwordsMatch = password.length > 0 && password === confirmPassword;
+  const canSubmit = passwordValid && passwordsMatch && !loading;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!passwordValid) {
+      toast.error("Lösenordet uppfyller inte alla krav");
+      return;
+    }
+
+    if (!passwordsMatch) {
+      toast.error("Lösenorden matchar inte");
+      return;
+    }
+
     setLoading(true);
 
     const supabase = createClient();
@@ -98,12 +119,36 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={6}
+                minLength={8}
               />
+              <ul className="space-y-1 pt-1">
+                <PasswordRequirement met={hasMinLength} label="Minst 8 tecken" />
+                <PasswordRequirement
+                  met={hasUppercase}
+                  label="Minst en stor bokstav"
+                />
+                <PasswordRequirement met={hasNumber} label="Minst en siffra" />
+              </ul>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Bekräfta lösenord</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              {confirmPassword.length > 0 && !passwordsMatch && (
+                <p className="text-xs text-destructive">
+                  Lösenorden matchar inte
+                </p>
+              )}
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={!canSubmit}>
               {loading ? "Skapar konto…" : "Registrera"}
             </Button>
             <p className="text-xs text-muted-foreground text-center">
@@ -133,5 +178,23 @@ export default function RegisterPage() {
         </form>
       </Card>
     </div>
+  );
+}
+
+function PasswordRequirement({ met, label }: { met: boolean; label: string }) {
+  return (
+    <li
+      className={cn(
+        "flex items-center gap-2 text-xs transition-colors",
+        met ? "text-green-600 dark:text-green-500" : "text-muted-foreground"
+      )}
+    >
+      {met ? (
+        <Check className="size-3.5 shrink-0" />
+      ) : (
+        <X className="size-3.5 shrink-0" />
+      )}
+      {label}
+    </li>
   );
 }
