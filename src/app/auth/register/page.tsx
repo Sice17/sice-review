@@ -8,14 +8,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
 
 export default function RegisterPage() {
@@ -82,11 +75,16 @@ export default function RegisterPage() {
   if (submitted) {
     return (
       <div className="flex min-h-full flex-col items-center justify-center px-4 py-12">
-        <span className="mb-6 text-2xl font-bold tracking-tight text-foreground">
-          SICE Review
-        </span>
-        <Card className="w-full max-w-md rounded-xl shadow-lg">
-          <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
+        <div className="mb-8 flex flex-col items-center gap-1.5 text-center">
+          <span className="text-2xl font-bold tracking-tight text-foreground">
+            SICE Review
+          </span>
+          <span className="text-sm text-muted-foreground">
+            Bekräfta din e-post
+          </span>
+        </div>
+        <Card className="w-full max-w-md gap-0 rounded-xl border-t-4 border-t-blue-600 py-0 shadow-lg">
+          <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
             <CheckCircle className="size-14 text-green-600 dark:text-green-500" />
             <h1 className="text-xl font-bold tracking-tight">
               Kolla din e-post! 📬
@@ -108,16 +106,17 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-full flex-col items-center justify-center px-4 py-12">
-      <span className="mb-6 text-2xl font-bold tracking-tight text-foreground">
-        SICE Review
-      </span>
-      <Card className="w-full max-w-md rounded-xl shadow-lg">
-        <CardHeader>
-          <CardTitle>Skapa konto</CardTitle>
-          <CardDescription>Starta din provperiod med SICE Review</CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+      <div className="mb-8 flex flex-col items-center gap-1.5 text-center">
+        <span className="text-2xl font-bold tracking-tight text-foreground">
+          SICE Review
+        </span>
+        <span className="text-sm text-muted-foreground">
+          Skapa ditt konto
+        </span>
+      </div>
+      <Card className="w-full max-w-md gap-0 rounded-xl border-t-4 border-t-blue-600 py-0 shadow-lg">
+        <CardContent className="p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="companyName">Företagsnamn</Label>
               <Input
@@ -175,12 +174,10 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full" disabled={!canSubmit}>
+            <Button type="submit" className="h-11 w-full" disabled={!canSubmit}>
               {loading ? "Skapar konto…" : "Registrera"}
             </Button>
-            <p className="text-xs text-muted-foreground text-center">
+            <p className="text-center text-xs text-muted-foreground">
               Genom att registrera dig godkänner du våra{" "}
               <Link
                 href="/terms"
@@ -197,14 +194,17 @@ export default function RegisterPage() {
               </Link>
               .
             </p>
-            <p className="text-sm text-muted-foreground text-center">
+            <p className="text-center text-sm text-muted-foreground">
               Har du redan konto?{" "}
-              <Link href="/auth/login" className="text-primary underline-offset-4 hover:underline">
+              <Link
+                href="/auth/login"
+                className="text-primary underline-offset-4 hover:underline"
+              >
                 Logga in
               </Link>
             </p>
-          </CardFooter>
-        </form>
+          </form>
+        </CardContent>
       </Card>
     </div>
   );
