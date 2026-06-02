@@ -19,6 +19,7 @@ import { ChangePasswordForm } from "@/components/ChangePasswordForm";
 import { DataManagement } from "@/components/DataManagement";
 import { SmsTemplateEditor } from "@/components/SmsTemplateEditor";
 import { PublicReviewPageSection } from "@/components/PublicReviewPageSection";
+import { SettingsTabs } from "@/components/SettingsTabs";
 import { SMS_TEMPLATE_MAX_LENGTH } from "@/lib/sms-template";
 
 export default async function SettingsPage() {
@@ -119,153 +120,176 @@ export default async function SettingsPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Inställningar</h1>
-        <p className="text-muted-foreground">Hantera din prenumeration</p>
+        <p className="text-muted-foreground">
+          Hantera konto, anpassning och säkerhet
+        </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Din plan</CardTitle>
-          {hasPlan && (
-            <CardDescription>
-              SICE Review — 1 199 kr/mån ex. moms
-            </CardDescription>
-          )}
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Företag</span>
-            <span className="font-medium">{profile?.company_name || "—"}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Prenumeration</span>
-            <Badge variant="outline" className={statusBadge.className}>
-              {statusBadge.label}
-            </Badge>
-          </div>
-          <BillingButtons status={subscriptionStatus} />
-        </CardContent>
-      </Card>
+      <SettingsTabs
+        account={
+          <>
+            <Card>
+              <CardHeader>
+                <CardTitle>Din plan</CardTitle>
+                {hasPlan && (
+                  <CardDescription>
+                    SICE Review — 1 199 kr/mån ex. moms
+                  </CardDescription>
+                )}
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Företag</span>
+                  <span className="font-medium">
+                    {profile?.company_name || "—"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    Prenumeration
+                  </span>
+                  <Badge variant="outline" className={statusBadge.className}>
+                    {statusBadge.label}
+                  </Badge>
+                </div>
+                <BillingButtons status={subscriptionStatus} />
+              </CardContent>
+            </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Google recensioner</CardTitle>
-          <CardDescription>
-            Lägg till din publika Google-recensionslänk för att skicka nöjda kunder
-            vidare efter 4–5 stjärnor.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form action={saveGoogleReviewUrl} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="google_review_url">Din Google recensionslänk</Label>
-              <Input
-                id="google_review_url"
-                name="google_review_url"
-                type="url"
-                placeholder="https://g.page/r/YOUR_ID/review"
-                defaultValue={profile?.google_review_url ?? ""}
+            <Card>
+              <CardHeader>
+                <CardTitle>Google recensioner</CardTitle>
+                <CardDescription>
+                  Lägg till din publika Google-recensionslänk för att skicka
+                  nöjda kunder vidare efter 4–5 stjärnor.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form action={saveGoogleReviewUrl} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="google_review_url">
+                      Din Google recensionslänk
+                    </Label>
+                    <Input
+                      id="google_review_url"
+                      name="google_review_url"
+                      type="url"
+                      placeholder="https://g.page/r/YOUR_ID/review"
+                      defaultValue={profile?.google_review_url ?? ""}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Hämta länken från din Google Business-profil under “Be om
+                      recensioner”.
+                    </p>
+                  </div>
+                  <Button type="submit">Spara</Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Din publika recensionssida</CardTitle>
+                <CardDescription>
+                  Dela denna sida för att visa dina bästa recensioner publikt.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PublicReviewPageSection
+                  companyName={profile?.company_name ?? ""}
+                />
+              </CardContent>
+            </Card>
+          </>
+        }
+        customize={
+          <>
+            <Card>
+              <CardHeader>
+                <CardTitle>Anpassa ditt SMS</CardTitle>
+                <CardDescription>
+                  Anpassa texten i recensions-SMS:et som skickas till dina
+                  kunder.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <SmsTemplateEditor
+                  initialTemplate={smsTemplate}
+                  companyName={profile?.company_name ?? ""}
+                  onSave={saveSmsTemplate}
+                />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Recensionswidget</CardTitle>
+                <CardDescription>
+                  Klistra in denna kod på din hemsida för att visa dina bästa
+                  recensioner automatiskt.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <WidgetEmbed companyId={user!.id} />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Utseende</CardTitle>
+                <CardDescription>
+                  Anpassa hur SICE Review ser ut för dig.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ThemeToggle />
+              </CardContent>
+            </Card>
+          </>
+        }
+        notifications={
+          <Card>
+            <CardHeader>
+              <CardTitle>Notiser</CardTitle>
+              <CardDescription>
+                Hantera vilka email du får från SICE Review.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <WeeklyReportToggle
+                initialEnabled={profile?.weekly_report_enabled ?? true}
               />
-              <p className="text-xs text-muted-foreground">
-                Hämta länken från din Google Business-profil under “Be om recensioner”.
-              </p>
-            </div>
-            <Button type="submit">Spara</Button>
-          </form>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        }
+        security={
+          <>
+            <Card>
+              <CardHeader>
+                <CardTitle>Säkerhet</CardTitle>
+                <CardDescription>
+                  Uppdatera ditt lösenord för att hålla kontot säkert.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChangePasswordForm />
+              </CardContent>
+            </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Anpassa ditt SMS</CardTitle>
-          <CardDescription>
-            Anpassa texten i recensions-SMS:et som skickas till dina kunder.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <SmsTemplateEditor
-            initialTemplate={smsTemplate}
-            companyName={profile?.company_name ?? ""}
-            onSave={saveSmsTemplate}
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Din publika recensionssida</CardTitle>
-          <CardDescription>
-            Dela denna sida för att visa dina bästa recensioner publikt.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <PublicReviewPageSection
-            companyName={profile?.company_name ?? ""}
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Utseende</CardTitle>
-          <CardDescription>
-            Anpassa hur SICE Review ser ut för dig.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ThemeToggle />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Notiser</CardTitle>
-          <CardDescription>
-            Hantera vilka email du får från SICE Review.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <WeeklyReportToggle
-            initialEnabled={profile?.weekly_report_enabled ?? true}
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Säkerhet</CardTitle>
-          <CardDescription>
-            Uppdatera ditt lösenord för att hålla kontot säkert.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChangePasswordForm />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Recensionswidget</CardTitle>
-          <CardDescription>
-            Klistra in denna kod på din hemsida för att visa dina bästa
-            recensioner automatiskt.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <WidgetEmbed companyId={user!.id} />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Din data</CardTitle>
-          <CardDescription>
-            Exportera eller radera din data och ditt konto.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <DataManagement />
-        </CardContent>
-      </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Din data</CardTitle>
+                <CardDescription>
+                  Exportera eller radera din data och ditt konto.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <DataManagement />
+              </CardContent>
+            </Card>
+          </>
+        }
+      />
     </div>
   );
 }
