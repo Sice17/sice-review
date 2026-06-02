@@ -9,14 +9,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
 
 type Status = "verifying" | "ready" | "error";
@@ -127,14 +120,23 @@ function ResetPasswordContent() {
     }, 3000);
   }
 
+  const subtitle = done
+    ? "Klart!"
+    : status === "error"
+      ? "Ogiltig länk"
+      : "Välj ett nytt lösenord";
+
   return (
     <div className="flex min-h-full flex-col items-center justify-center px-4 py-12">
-      <span className="mb-6 text-2xl font-bold tracking-tight text-foreground">
-        SICE Review
-      </span>
-      <Card className="w-full max-w-md rounded-xl shadow-lg">
+      <div className="mb-8 flex flex-col items-center gap-1.5 text-center">
+        <span className="text-2xl font-bold tracking-tight text-foreground">
+          SICE Review
+        </span>
+        <span className="text-sm text-muted-foreground">{subtitle}</span>
+      </div>
+      <Card className="w-full max-w-md gap-0 rounded-xl border-t-4 border-t-blue-600 py-0 shadow-lg">
         {done ? (
-          <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
+          <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
             <CheckCircle className="size-14 text-green-600 dark:text-green-500" />
             <h1 className="text-xl font-bold tracking-tight">
               Lösenordet är uppdaterat!
@@ -144,81 +146,75 @@ function ResetPasswordContent() {
             </p>
           </CardContent>
         ) : status === "verifying" ? (
-          <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
+          <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
             <Loader2 className="size-10 animate-spin text-primary" />
             <p className="text-sm text-muted-foreground">
               Verifierar återställningslänk...
             </p>
           </CardContent>
         ) : status === "error" ? (
-          <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
+          <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
             <AlertCircle className="size-14 text-destructive" />
             <h1 className="text-xl font-bold tracking-tight">Ogiltig länk</h1>
             <p className="text-sm text-muted-foreground">
               Ingen giltig återställningssession. Begär en ny
               återställningslänk.
             </p>
-            <Button asChild className="mt-2">
+            <Button asChild className="mt-2 h-11">
               <Link href="/auth/login">Till inloggning</Link>
             </Button>
           </CardContent>
         ) : (
-          <>
-            <CardHeader>
-              <CardTitle>Återställ lösenord</CardTitle>
-              <CardDescription>
-                Välj ett nytt lösenord för ditt konto
-              </CardDescription>
-            </CardHeader>
-            <form onSubmit={handleSubmit}>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="password">Nytt lösenord</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    autoComplete="new-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={8}
+          <CardContent className="p-8">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="password">Nytt lösenord</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={8}
+                />
+                <ul className="space-y-1 pt-1">
+                  <PasswordRequirement
+                    met={hasMinLength}
+                    label="Minst 8 tecken"
                   />
-                  <ul className="space-y-1 pt-1">
-                    <PasswordRequirement
-                      met={hasMinLength}
-                      label="Minst 8 tecken"
-                    />
-                    <PasswordRequirement
-                      met={hasUppercase}
-                      label="Minst en stor bokstav"
-                    />
-                    <PasswordRequirement met={hasNumber} label="Minst en siffra" />
-                  </ul>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Bekräfta lösenord</Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    autoComplete="new-password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
+                  <PasswordRequirement
+                    met={hasUppercase}
+                    label="Minst en stor bokstav"
                   />
-                  {confirmPassword.length > 0 && !passwordsMatch && (
-                    <p className="text-xs text-destructive">
-                      Lösenorden matchar inte
-                    </p>
-                  )}
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" className="w-full" disabled={!canSubmit}>
-                  {loading ? "Uppdaterar…" : "Uppdatera lösenord"}
-                </Button>
-              </CardFooter>
+                  <PasswordRequirement met={hasNumber} label="Minst en siffra" />
+                </ul>
+              </div>
+              <div className="mt-4 space-y-2">
+                <Label htmlFor="confirmPassword">Bekräfta lösenord</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                {confirmPassword.length > 0 && !passwordsMatch && (
+                  <p className="text-xs text-destructive">
+                    Lösenorden matchar inte
+                  </p>
+                )}
+              </div>
+              <Button
+                type="submit"
+                className="h-11 w-full"
+                disabled={!canSubmit}
+              >
+                {loading ? "Uppdaterar…" : "Uppdatera lösenord"}
+              </Button>
             </form>
-          </>
+          </CardContent>
         )}
       </Card>
     </div>
