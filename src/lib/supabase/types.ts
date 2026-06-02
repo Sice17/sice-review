@@ -32,6 +32,8 @@ export interface Feedback {
   transaction_id: string;
   rating: number;
   comment: string | null;
+  google_clicked: boolean;
+  google_clicked_at: string | null;
   created_at: string;
 }
 
@@ -114,6 +116,8 @@ export interface Database {
         Update: {
           rating?: number;
           comment?: string | null;
+          google_clicked?: boolean;
+          google_clicked_at?: string | null;
         };
         Relationships: [
           {

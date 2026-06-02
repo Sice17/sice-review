@@ -10,9 +10,10 @@ import { createClient } from "@/lib/supabase/client";
 
 interface DashboardNavProps {
   companyName: string;
+  isAdmin?: boolean;
 }
 
-export function DashboardNav({ companyName }: DashboardNavProps) {
+export function DashboardNav({ companyName, isAdmin = false }: DashboardNavProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -50,6 +51,14 @@ export function DashboardNav({ companyName }: DashboardNavProps) {
             >
               Inställningar
             </Link>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="font-medium text-amber-500 transition-colors hover:text-amber-400"
+              >
+                Admin
+              </Link>
+            )}
           </nav>
         </div>
 
@@ -92,6 +101,15 @@ export function DashboardNav({ companyName }: DashboardNavProps) {
           >
             Inställningar
           </Link>
+          {isAdmin && (
+            <Link
+              href="/admin"
+              onClick={() => setMenuOpen(false)}
+              className="rounded-md px-2 py-2 text-sm font-medium text-amber-500 hover:bg-muted hover:text-amber-400"
+            >
+              Admin
+            </Link>
+          )}
           <button
             type="button"
             onClick={handleLogout}

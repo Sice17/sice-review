@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardNav } from "@/components/DashboardNav";
-import { hasActiveSubscription } from "@/lib/admin";
+import { hasActiveSubscription, isAdminUser } from "@/lib/admin";
 
 export default async function DashboardLayout({
   children,
@@ -52,7 +52,10 @@ export default async function DashboardLayout({
           </div>
         )
       )}
-      <DashboardNav companyName={profile?.company_name ?? ""} />
+      <DashboardNav
+        companyName={profile?.company_name ?? ""}
+        isAdmin={isAdminUser(user.id)}
+      />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</main>
     </div>
   );

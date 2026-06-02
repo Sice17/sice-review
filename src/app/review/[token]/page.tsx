@@ -33,11 +33,15 @@ async function submitFeedback(formData: FormData) {
     return { error: "Du har redan lämnat ett omdöme" };
   }
 
-  const { error: feedbackError } = await supabase.from("feedback").insert({
-    transaction_id: transactionId,
-    rating,
-    comment: comment || null,
-  });
+  const { data: feedback, error: feedbackError } = await supabase
+    .from("feedback")
+    .insert({
+      transaction_id: transactionId,
+      rating,
+      comment: comment || null,
+    })
+    .select("id")
+    .single();
 
   if (feedbackError) {
     return { error: feedbackError.message };
@@ -61,6 +65,7 @@ async function submitFeedback(formData: FormData) {
       (profile as { google_review_url?: string | null } | null)
         ?.google_review_url ?? null,
     transactionId,
+    feedbackId: (feedback as { id: string }).id,
   };
 }
 

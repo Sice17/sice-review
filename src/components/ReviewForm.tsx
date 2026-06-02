@@ -13,6 +13,7 @@ type SubmitResult = {
   rating?: number;
   googleReviewUrl?: string | null;
   transactionId?: string;
+  feedbackId?: string;
   comment?: string | null;
 };
 
@@ -94,7 +95,21 @@ export function ReviewForm({ transactionId, submitAction }: ReviewFormProps) {
           </p>
           {result.googleReviewUrl ? (
             <Button asChild className="mt-5">
-              <Link href={result.googleReviewUrl} target="_blank" rel="noreferrer">
+              <Link
+                href={result.googleReviewUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => {
+                  if (result.feedbackId) {
+                    void fetch("/api/track-google-click", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ feedbackId: result.feedbackId }),
+                      keepalive: true,
+                    });
+                  }
+                }}
+              >
                 Lämna recension på Google
               </Link>
             </Button>
