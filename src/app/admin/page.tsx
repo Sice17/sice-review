@@ -2,9 +2,9 @@ import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { isAdminUser } from "@/lib/admin";
 import {
-  AdminCustomerTable,
-  type AdminCustomerRow,
-} from "@/components/AdminCustomerTable";
+  CustomerTable,
+  type CustomerRow,
+} from "@/components/admin/CustomerTable";
 import { AdminHeader } from "@/components/AdminHeader";
 import {
   Card,
@@ -17,6 +17,7 @@ interface ProfileRow {
   id: string;
   company_name: string | null;
   stripe_subscription_status: string | null;
+  is_blocked: boolean | null;
   created_at: string;
 }
 
@@ -56,7 +57,9 @@ export default async function AdminPage() {
     await Promise.all([
       service
         .from("profiles")
-        .select("id, company_name, stripe_subscription_status, created_at")
+        .select(
+          "id, company_name, stripe_subscription_status, is_blocked, created_at"
+        )
         .order("created_at", { ascending: false }),
       service
         .from("transactions")
@@ -98,7 +101,7 @@ export default async function AdminPage() {
     statsByContractor.set(tx.contractor_id, stats);
   }
 
-  const customers: AdminCustomerRow[] = profiles.map((profile) => {
+  const customers: CustomerRow[] = profiles.map((profile) => {
     const stats = statsByContractor.get(profile.id);
     const total = stats?.total ?? 0;
     const completed = stats?.completed ?? 0;
@@ -109,6 +112,7 @@ export default async function AdminPage() {
       companyName: profile.company_name ?? "",
       email: emailById.get(profile.id) ?? "—",
       subscriptionStatus: profile.stripe_subscription_status,
+      isBlocked: Boolean(profile.is_blocked),
       totalSms: total,
       responseRate: total > 0 ? Math.round((completed / total) * 100) : 0,
       avgRating:
@@ -165,7 +169,7 @@ export default async function AdminPage() {
           ))}
         </div>
 
-        <AdminCustomerTable customers={customers} />
+        <CustomerTable customers={customers} />
       </main>
     </div>
   );
