@@ -52,12 +52,20 @@ export function DashboardNav({ companyName, isAdmin = false }: DashboardNavProps
               Inställningar
             </Link>
             {isAdmin && (
-              <Link
-                href="/admin"
-                className="font-medium text-amber-500 transition-colors hover:text-amber-400"
-              >
-                Admin
-              </Link>
+              <>
+                <Link
+                  href="/admin"
+                  className="font-medium text-amber-500 transition-colors hover:text-amber-400"
+                >
+                  Admin
+                </Link>
+                <Link
+                  href="/admin/email"
+                  className="font-medium text-amber-500/80 transition-colors hover:text-amber-400"
+                >
+                  Skicka email
+                </Link>
+              </>
             )}
           </nav>
         </div>
@@ -102,13 +110,22 @@ export function DashboardNav({ companyName, isAdmin = false }: DashboardNavProps
             Inställningar
           </Link>
           {isAdmin && (
-            <Link
-              href="/admin"
-              onClick={() => setMenuOpen(false)}
-              className="rounded-md px-2 py-2 text-sm font-medium text-amber-500 hover:bg-muted hover:text-amber-400"
-            >
-              Admin
-            </Link>
+            <>
+              <Link
+                href="/admin"
+                onClick={() => setMenuOpen(false)}
+                className="rounded-md px-2 py-2 text-sm font-medium text-amber-500 hover:bg-muted hover:text-amber-400"
+              >
+                Admin
+              </Link>
+              <Link
+                href="/admin/email"
+                onClick={() => setMenuOpen(false)}
+                className="rounded-md px-2 py-2 text-sm font-medium text-amber-500/80 hover:bg-muted hover:text-amber-400"
+              >
+                Skicka email
+              </Link>
+            </>
           )}
           <button
             type="button"

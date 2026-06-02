@@ -13,6 +13,7 @@ export interface Profile {
   stripe_subscription_id: string | null;
   stripe_subscription_status: string;
   weekly_report_enabled: boolean;
+  is_blocked: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -63,6 +64,7 @@ export interface Database {
           stripe_subscription_id?: string | null;
           stripe_subscription_status?: string;
           weekly_report_enabled?: boolean;
+          is_blocked?: boolean;
           created_at?: string;
           updated_at?: string;
         };
@@ -74,6 +76,7 @@ export interface Database {
           stripe_subscription_id?: string | null;
           stripe_subscription_status?: string;
           weekly_report_enabled?: boolean;
+          is_blocked?: boolean;
           updated_at?: string;
         };
         Relationships: [];

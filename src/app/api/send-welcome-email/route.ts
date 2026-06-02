@@ -45,5 +45,29 @@ export async function POST(request: Request) {
     );
   }
 
+  const registeredAt = new Date().toLocaleString("sv-SE", {
+    dateStyle: "long",
+    timeStyle: "short",
+  });
+
+  void resend.emails
+    .send({
+      from: fromAddress,
+      to: "sicek17@gmail.com",
+      subject: "Ny kund registrerad! 🎉",
+      html: `<!DOCTYPE html>
+<html lang="sv">
+<body style="font-family:Arial,Helvetica,sans-serif;line-height:1.6;color:#0f172a;">
+  <h2 style="margin:0 0 16px 0;">Ny kund registrerad! 🎉</h2>
+  <p><strong>Företag:</strong> ${body.companyName}</p>
+  <p><strong>E-post:</strong> ${body.email}</p>
+  <p><strong>Registrerad:</strong> ${registeredAt}</p>
+</body>
+</html>`,
+    })
+    .catch((err) => {
+      console.error("[welcome-email] Admin notification failed:", err);
+    });
+
   return NextResponse.json({ ok: true });
 }

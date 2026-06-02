@@ -4,6 +4,8 @@ import { ArrowLeft, Check, Star } from "lucide-react";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { isAdminUser } from "@/lib/admin";
 import { subscriptionBadge } from "@/lib/subscription-status";
+import { AdminHeader } from "@/components/AdminHeader";
+import { BlockToggleButton } from "@/components/BlockToggleButton";
 import {
   Card,
   CardContent,
@@ -29,6 +31,7 @@ interface ProfileRow {
   id: string;
   company_name: string | null;
   stripe_subscription_status: string | null;
+  is_blocked: boolean | null;
   created_at: string;
 }
 
@@ -84,7 +87,9 @@ export default async function AdminDetailPage({ params }: AdminDetailPageProps) 
     await Promise.all([
       service
         .from("profiles")
-        .select("id, company_name, stripe_subscription_status, created_at")
+        .select(
+          "id, company_name, stripe_subscription_status, is_blocked, created_at"
+        )
         .eq("id", userId)
         .maybeSingle(),
       service
@@ -123,6 +128,7 @@ export default async function AdminDetailPage({ params }: AdminDetailPageProps) 
   ).length;
 
   const badge = subscriptionBadge(profile.stripe_subscription_status);
+  const isBlocked = Boolean(profile.is_blocked);
 
   const stats = [
     { title: "SMS skickade", value: String(total) },
@@ -133,22 +139,7 @@ export default async function AdminDetailPage({ params }: AdminDetailPageProps) 
 
   return (
     <div className="flex min-h-full flex-col">
-      <header className="border-b border-border bg-background">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <div className="flex items-center gap-3">
-            <span className="font-bold text-foreground">SICE Review</span>
-            <span className="rounded-md bg-amber-500/15 px-2 py-0.5 text-xs font-semibold text-amber-500">
-              Admin
-            </span>
-          </div>
-          <Link
-            href="/dashboard"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Till dashboard
-          </Link>
-        </div>
-      </header>
+      <AdminHeader active="customers" />
 
       <main className="mx-auto w-full max-w-6xl flex-1 space-y-8 px-4 py-8">
         <div>
@@ -169,10 +160,14 @@ export default async function AdminDetailPage({ params }: AdminDetailPageProps) 
             <Badge variant="secondary" className={badge.className}>
               {badge.label}
             </Badge>
+            {isBlocked && (
+              <Badge variant="destructive">Blockerad</Badge>
+            )}
           </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
             <span>{email}</span>
             <span>Registrerad {formatDate(profile.created_at)}</span>
+            <BlockToggleButton userId={userId} isBlocked={isBlocked} />
           </div>
         </div>
 

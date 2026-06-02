@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { sendReviewSMS } from "@/lib/twilio";
 import { isValidSwedishPhone, normalizeSwedishPhone } from "@/lib/utils";
-import { hasActiveSubscription } from "@/lib/admin";
+import { hasActiveSubscription, isUserBlocked } from "@/lib/admin";
 
 const bodySchema = z.object({
   customerPhone: z.string().min(1),
@@ -30,6 +30,16 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { success: false, error: "Unauthorized" },
       { status: 401 }
+    );
+  }
+
+  if (await isUserBlocked(user.id)) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Ditt konto är inaktiverat. Kontakta support.",
+      },
+      { status: 403 }
     );
   }
 

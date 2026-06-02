@@ -1,12 +1,11 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { isAdminUser } from "@/lib/admin";
-import { isActiveSubscriptionStatus } from "@/lib/subscription-status";
 import {
   AdminCustomerTable,
   type AdminCustomerRow,
 } from "@/components/AdminCustomerTable";
+import { AdminHeader } from "@/components/AdminHeader";
 import {
   Card,
   CardContent,
@@ -122,35 +121,26 @@ export default async function AdminPage() {
   });
 
   const totalCustomers = customers.length;
-  const activeSubscribers = profiles.filter((p) =>
-    isActiveSubscriptionStatus(p.stripe_subscription_status)
+  const activeSubscribers = profiles.filter(
+    (p) => p.stripe_subscription_status === "active"
+  ).length;
+  const trialingCount = profiles.filter(
+    (p) => p.stripe_subscription_status === "trialing"
   ).length;
   const totalSmsSent = transactions.length;
+  const mrr = activeSubscribers * 1199;
 
   const summary = [
     { title: "Kunder totalt", value: String(totalCustomers) },
     { title: "Aktiva prenumeranter", value: String(activeSubscribers) },
+    { title: "MRR", value: `${mrr.toLocaleString("sv-SE")} kr` },
+    { title: "Provperioder", value: String(trialingCount) },
     { title: "SMS skickade totalt", value: String(totalSmsSent) },
   ];
 
   return (
     <div className="flex min-h-full flex-col">
-      <header className="border-b border-border bg-background">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <div className="flex items-center gap-3">
-            <span className="font-bold text-foreground">SICE Review</span>
-            <span className="rounded-md bg-amber-500/15 px-2 py-0.5 text-xs font-semibold text-amber-500">
-              Admin
-            </span>
-          </div>
-          <Link
-            href="/dashboard"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Till dashboard
-          </Link>
-        </div>
-      </header>
+      <AdminHeader active="customers" />
 
       <main className="mx-auto w-full max-w-6xl flex-1 space-y-8 px-4 py-8">
         <div>
@@ -160,7 +150,7 @@ export default async function AdminPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {summary.map((stat) => (
             <Card key={stat.title}>
               <CardHeader className="pb-2">
