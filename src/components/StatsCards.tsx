@@ -1,9 +1,10 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { ExternalLink, Star } from "lucide-react";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -26,6 +27,10 @@ export function StatsCards({ transactions }: StatsCardsProps) {
       ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
       : "—";
 
+  const googleClicks = transactions.filter(
+    (t) => t.feedback?.google_clicked
+  ).length;
+
   const latestComment = [...completed]
     .sort(
       (a, b) =>
@@ -43,6 +48,12 @@ export function StatsCards({ transactions }: StatsCardsProps) {
       icon: avgRating !== "—",
     },
     {
+      title: "Google-klick",
+      description: "Kunder som gått vidare till Google",
+      value: String(googleClicks),
+      googleIcon: true,
+    },
+    {
       title: "Senaste feedback",
       value: latestComment
         ? latestComment.length > 60
@@ -54,13 +65,18 @@ export function StatsCards({ transactions }: StatsCardsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       {stats.map((stat) => (
         <Card key={stat.title}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               {stat.title}
             </CardTitle>
+            {"description" in stat && stat.description && (
+              <CardDescription className="text-xs">
+                {stat.description}
+              </CardDescription>
+            )}
           </CardHeader>
           <CardContent>
             <p
@@ -71,8 +87,11 @@ export function StatsCards({ transactions }: StatsCardsProps) {
               }
             >
               {stat.value}
-              {stat.icon && (
+              {"icon" in stat && stat.icon && (
                 <Star className="size-5 fill-amber-400 text-amber-400" />
+              )}
+              {"googleIcon" in stat && stat.googleIcon && (
+                <ExternalLink className="size-5 text-[#4285F4]" />
               )}
             </p>
           </CardContent>
