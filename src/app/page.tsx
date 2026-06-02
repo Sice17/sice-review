@@ -17,7 +17,10 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <span className="text-lg font-bold tracking-tight">SICE Review</span>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" asChild className="text-muted-foreground">
+              <Link href="/contact">Kontakt</Link>
+            </Button>
             <Button variant="ghost" asChild>
               <Link href="/auth/login">Logga in</Link>
             </Button>
@@ -129,6 +132,12 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-2 px-4 text-center sm:flex-row sm:gap-4">
           <p>© {new Date().getFullYear()} SICE Review. Alla rättigheter förbehållna.</p>
           <nav className="flex gap-4">
+            <Link
+              href="/contact"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Kontakt
+            </Link>
             <Link
               href="/privacy"
               className="text-muted-foreground transition-colors hover:text-foreground"
