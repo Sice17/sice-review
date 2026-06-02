@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { isValidSwedishPhone } from "@/lib/utils";
+import { buildSmsMessage } from "@/lib/sms-template";
 
 async function parseJsonResponse(res: Response) {
   const text = await res.text();
@@ -29,17 +30,22 @@ async function parseJsonResponse(res: Response) {
 
 interface QuickSendFormProps {
   companyName?: string;
+  smsTemplate?: string | null;
 }
 
-export function QuickSendForm({ companyName }: QuickSendFormProps) {
+export function QuickSendForm({ companyName, smsTemplate }: QuickSendFormProps) {
   const router = useRouter();
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const previewName = customerName.trim() || "kunden";
+  const previewName = customerName.trim() || "Anna";
   const previewCompany = companyName?.trim() || "ditt företag";
-  const smsPreview = `Hej ${previewName}! Tack för att du anlitade ${previewCompany}. Vi uppskattar om du tar 30 sekunder och delar din upplevelse: https://sicereview.se/review/xxxx 🙏`;
+  const smsPreview = buildSmsMessage(smsTemplate, {
+    namn: previewName,
+    företag: previewCompany,
+    länk: "https://sicereview.se/review/xxxx",
+  });
 
   async function sendReview() {
     if (!isValidSwedishPhone(customerPhone)) {

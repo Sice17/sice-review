@@ -20,23 +20,8 @@ function getTwilioConfig() {
   return { accountSid, authToken, fromNumber };
 }
 
-export async function sendReviewSMS({
-  to,
-  customerName,
-  companyName,
-  reviewUrl,
-}: {
-  to: string;
-  customerName?: string | null;
-  companyName: string;
-  reviewUrl: string;
-}) {
+export async function sendSMS({ to, body }: { to: string; body: string }) {
   const { accountSid, authToken, fromNumber } = getTwilioConfig();
-
-  const body = customerName
-    ? `Hej ${customerName}! Tack för att du anlitade ${companyName}. Vi uppskattar om du tar 30 sekunder och delar din upplevelse: ${reviewUrl} 🙏`
-    : `Hej! Tack för att du anlitade ${companyName}. Dela gärna din upplevelse här: ${reviewUrl} 🙏`;
-
   const client = twilio(accountSid, authToken);
 
   await client.messages.create({
@@ -44,6 +29,16 @@ export async function sendReviewSMS({
     from: fromNumber,
     to,
   });
+}
+
+export async function sendReviewSMS({
+  to,
+  body,
+}: {
+  to: string;
+  body: string;
+}) {
+  await sendSMS({ to, body });
 }
 
 export async function sendReminderSMS({
@@ -57,17 +52,25 @@ export async function sendReminderSMS({
   companyName: string;
   reviewUrl: string;
 }) {
-  const { accountSid, authToken, fromNumber } = getTwilioConfig();
-
   const body = customerName
     ? `Hej ${customerName}! Vi vill påminna om att ${companyName} gärna vill höra din upplevelse 🙏 Det tar bara 30 sekunder: ${reviewUrl}`
     : `Hej! Vi vill påminna om att ${companyName} gärna vill höra din upplevelse 🙏 Det tar bara 30 sekunder: ${reviewUrl}`;
 
-  const client = twilio(accountSid, authToken);
+  await sendSMS({ to, body });
+}
 
-  await client.messages.create({
-    body,
-    from: fromNumber,
-    to,
-  });
+export async function sendFollowUpSMS({
+  to,
+  customerName,
+  reviewUrl,
+}: {
+  to: string;
+  customerName?: string | null;
+  reviewUrl: string;
+}) {
+  const body = customerName
+    ? `Hej ${customerName}! Vi hoppas allt gick bra med jobbet. Om du har en minut skulle vi uppskatta om du delar din upplevelse: ${reviewUrl} 🙏`
+    : `Hej! Vi hoppas allt gick bra med jobbet. Om du har en minut skulle vi uppskatta om du delar din upplevelse: ${reviewUrl} 🙏`;
+
+  await sendSMS({ to, body });
 }

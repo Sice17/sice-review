@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { sendReviewSMS } from "@/lib/twilio";
+import { buildSmsMessage } from "@/lib/sms-template";
 import { isValidSwedishPhone, normalizeSwedishPhone } from "@/lib/utils";
 import { hasActiveSubscription, isUserBlocked } from "@/lib/admin";
 
@@ -45,12 +46,16 @@ export async function POST(request: Request) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("company_name, stripe_subscription_status")
+    .select("company_name, stripe_subscription_status, sms_template")
     .eq("id", user.id)
     .maybeSingle();
 
   const typedProfile = profile as
-    | { company_name?: string; stripe_subscription_status?: string }
+    | {
+        company_name?: string;
+        stripe_subscription_status?: string;
+        sms_template?: string | null;
+      }
     | null;
 
   if (
@@ -116,13 +121,17 @@ export async function POST(request: Request) {
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
   const reviewUrl = `${appUrl}/review/${savedTransaction.token}`;
+  const companyName = typedProfile?.company_name || "oss";
+  const smsBody = buildSmsMessage(typedProfile?.sms_template, {
+    namn: body.customerName?.trim() || "där",
+    företag: companyName,
+    länk: reviewUrl,
+  });
 
   try {
     await sendReviewSMS({
       to: customerPhone,
-      customerName: body.customerName,
-      companyName: typedProfile?.company_name || "oss",
-      reviewUrl,
+      body: smsBody,
     });
     console.log("[send-review] SMS sent to", customerPhone);
   } catch (err) {

@@ -12,12 +12,14 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("company_name")
+    .select("company_name, sms_template")
     .eq("id", user!.id)
     .maybeSingle();
 
   const companyName =
     (profile as { company_name?: string } | null)?.company_name ?? "";
+  const smsTemplate =
+    (profile as { sms_template?: string | null } | null)?.sms_template ?? null;
 
   const { data: rows } = await supabase
     .from("transactions")
@@ -42,7 +44,7 @@ export default async function DashboardPage() {
         </p>
       </div>
       <StatsCards transactions={transactions} />
-      <QuickSendForm companyName={companyName} />
+      <QuickSendForm companyName={companyName} smsTemplate={smsTemplate} />
       <div>
         <h2 className="mb-4 text-lg font-semibold">Historik</h2>
         <ReviewHistoryTable transactions={transactions} />

@@ -2,7 +2,8 @@ export type TransactionStatus =
   | "sent"
   | "opened"
   | "completed"
-  | "reminded";
+  | "reminded"
+  | "followed_up";
 
 export interface Profile {
   id: string;
@@ -14,6 +15,10 @@ export interface Profile {
   stripe_subscription_status: string;
   weekly_report_enabled: boolean;
   is_blocked: boolean;
+  sms_template: string | null;
+  milestone_10_sent: boolean;
+  milestone_25_sent: boolean;
+  milestone_50_sent: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -65,6 +70,10 @@ export interface Database {
           stripe_subscription_status?: string;
           weekly_report_enabled?: boolean;
           is_blocked?: boolean;
+          sms_template?: string | null;
+          milestone_10_sent?: boolean;
+          milestone_25_sent?: boolean;
+          milestone_50_sent?: boolean;
           created_at?: string;
           updated_at?: string;
         };
@@ -77,6 +86,10 @@ export interface Database {
           stripe_subscription_status?: string;
           weekly_report_enabled?: boolean;
           is_blocked?: boolean;
+          sms_template?: string | null;
+          milestone_10_sent?: boolean;
+          milestone_25_sent?: boolean;
+          milestone_50_sent?: boolean;
           updated_at?: string;
         };
         Relationships: [];

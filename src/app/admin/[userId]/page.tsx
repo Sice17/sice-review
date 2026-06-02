@@ -55,12 +55,14 @@ const statusLabels: Record<string, string> = {
   opened: "Öppnad",
   completed: "Slutförd",
   reminded: "Påminnelse skickad",
+  followed_up: "Uppföljning skickad",
 };
 
 const statusClass: Record<string, string> = {
   completed: "bg-[#052e16] text-[#16a34a]",
   opened: "bg-[#0c1f3d] text-[#60a5fa]",
   reminded: "bg-[#2e1f05] text-[#f59e0b]",
+  followed_up: "bg-[#1e1b4b] text-[#a78bfa]",
 };
 
 function normalizeFeedback(

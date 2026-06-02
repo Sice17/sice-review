@@ -22,6 +22,7 @@ const statusLabels: Record<string, string> = {
   opened: "Öppnad",
   completed: "Slutförd",
   reminded: "Påminnelse skickad",
+  followed_up: "Uppföljning skickad",
 };
 
 const statusVariant: Record<
@@ -126,7 +127,9 @@ export function ReviewHistoryTable({ transactions }: ReviewHistoryTableProps) {
                             ? "bg-[#0c1f3d] text-[#60a5fa]"
                             : tx.status === "reminded"
                               ? "bg-[#2e1f05] text-[#f59e0b]"
-                              : ""
+                              : tx.status === "followed_up"
+                                ? "bg-[#1e1b4b] text-[#a78bfa]"
+                                : ""
                       }
                     >
                       {statusLabels[tx.status] ?? tx.status}

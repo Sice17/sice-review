@@ -17,6 +17,9 @@ import { WeeklyReportToggle } from "@/components/WeeklyReportToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ChangePasswordForm } from "@/components/ChangePasswordForm";
 import { DataManagement } from "@/components/DataManagement";
+import { SmsTemplateEditor } from "@/components/SmsTemplateEditor";
+import { PublicReviewPageSection } from "@/components/PublicReviewPageSection";
+import { SMS_TEMPLATE_MAX_LENGTH } from "@/lib/sms-template";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -79,6 +82,39 @@ export default async function SettingsPage() {
     revalidatePath("/dashboard/settings");
   }
 
+  async function saveSmsTemplate(template: string) {
+    "use server";
+
+    if (template.length > SMS_TEMPLATE_MAX_LENGTH) {
+      return { error: `Max ${SMS_TEMPLATE_MAX_LENGTH} tecken` };
+    }
+
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return { error: "Unauthorized" };
+    }
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ sms_template: template.trim() || null })
+      .eq("id", user.id);
+
+    if (error) {
+      return { error: error.message };
+    }
+
+    revalidatePath("/dashboard/settings");
+    revalidatePath("/dashboard");
+    return {};
+  }
+
+  const smsTemplate =
+    (profile as { sms_template?: string | null } | null)?.sms_template ?? null;
+
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
@@ -135,6 +171,36 @@ export default async function SettingsPage() {
             </div>
             <Button type="submit">Spara</Button>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Anpassa ditt SMS</CardTitle>
+          <CardDescription>
+            Anpassa texten i recensions-SMS:et som skickas till dina kunder.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SmsTemplateEditor
+            initialTemplate={smsTemplate}
+            companyName={profile?.company_name ?? ""}
+            onSave={saveSmsTemplate}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Din publika recensionssida</CardTitle>
+          <CardDescription>
+            Dela denna sida för att visa dina bästa recensioner publikt.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <PublicReviewPageSection
+            companyName={profile?.company_name ?? ""}
+          />
         </CardContent>
       </Card>
 
