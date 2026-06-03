@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { RecoveryRedirect } from "@/components/RecoveryRedirect";
+import { LandingNavbar } from "@/components/LandingNavbar";
 
 const STEPS = [
   {
@@ -79,30 +80,7 @@ export default function LandingPage() {
   return (
     <div className="flex min-h-full flex-col">
       <RecoveryRedirect />
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <Link
-            href="/"
-            className="text-lg font-bold tracking-tight text-foreground"
-          >
-            SICE Review
-          </Link>
-          <div className="flex items-center gap-1 sm:gap-2">
-            <Button variant="ghost" asChild>
-              <Link href="/auth/login">Logga in</Link>
-            </Button>
-            <Button variant="ghost" asChild className="text-muted-foreground">
-              <Link href="/contact">Kontakt</Link>
-            </Button>
-            <Button asChild className="hidden sm:inline-flex">
-              <Link href="/auth/register">Prova gratis i 14 dagar</Link>
-            </Button>
-            <Button asChild size="sm" className="sm:hidden">
-              <Link href="/auth/register">Prova gratis</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <LandingNavbar />
 
       <main className="flex-1">
         {/* Hero */}

@@ -23,24 +23,38 @@ export function SettingsTabs({
 }: SettingsTabsProps) {
   return (
     <Tabs defaultValue="account" className="w-full">
-      <TabsList className="mb-6 h-auto w-full flex-wrap justify-start gap-1 p-1">
-        <TabsTrigger value="account" className="gap-1.5 px-3 py-2">
-          <User className="size-4" />
-          Konto
-        </TabsTrigger>
-        <TabsTrigger value="customize" className="gap-1.5 px-3 py-2">
-          <Settings className="size-4" />
-          Anpassa
-        </TabsTrigger>
-        <TabsTrigger value="notifications" className="gap-1.5 px-3 py-2">
-          <Bell className="size-4" />
-          Notiser
-        </TabsTrigger>
-        <TabsTrigger value="security" className="gap-1.5 px-3 py-2">
-          <Shield className="size-4" />
-          Säkerhet & Data
-        </TabsTrigger>
-      </TabsList>
+      <div className="mb-6 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+        <TabsList className="inline-flex h-auto w-max min-w-full flex-nowrap justify-start gap-1 p-1 sm:min-w-0 sm:w-full">
+          <TabsTrigger
+            value="account"
+            className="shrink-0 gap-1.5 px-2 py-2 text-xs sm:px-3 sm:text-sm"
+          >
+            <User className="hidden size-4 sm:inline" />
+            Konto
+          </TabsTrigger>
+          <TabsTrigger
+            value="customize"
+            className="shrink-0 gap-1.5 px-2 py-2 text-xs sm:px-3 sm:text-sm"
+          >
+            <Settings className="hidden size-4 sm:inline" />
+            Anpassa
+          </TabsTrigger>
+          <TabsTrigger
+            value="notifications"
+            className="shrink-0 gap-1.5 px-2 py-2 text-xs sm:px-3 sm:text-sm"
+          >
+            <Bell className="hidden size-4 sm:inline" />
+            Notiser
+          </TabsTrigger>
+          <TabsTrigger
+            value="security"
+            className="shrink-0 gap-1.5 px-2 py-2 text-xs sm:px-3 sm:text-sm"
+          >
+            <Shield className="hidden size-4 sm:inline" />
+            Säkerhet & Data
+          </TabsTrigger>
+        </TabsList>
+      </div>
 
       <TabsContent value="account" className="space-y-6">
         {account}

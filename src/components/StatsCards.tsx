@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -51,7 +51,6 @@ export function StatsCards({ transactions }: StatsCardsProps) {
       title: "Google-klick",
       description: "Kunder som gått vidare till Google",
       value: String(googleClicks),
-      googleIcon: true,
     },
     {
       title: "Senaste feedback",
@@ -89,9 +88,6 @@ export function StatsCards({ transactions }: StatsCardsProps) {
               {stat.value}
               {"icon" in stat && stat.icon && (
                 <Star className="size-5 fill-amber-400 text-amber-400" />
-              )}
-              {"googleIcon" in stat && stat.googleIcon && (
-                <ExternalLink className="size-5 text-[#4285F4]" />
               )}
             </p>
           </CardContent>
