@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { isAdminUser } from "@/lib/admin";
+import { calculateMrrFromProfiles } from "@/lib/stripe";
 import {
   CustomerTable,
   type CustomerRow,
@@ -17,6 +18,8 @@ interface ProfileRow {
   id: string;
   company_name: string | null;
   stripe_subscription_status: string | null;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
   is_blocked: boolean | null;
   created_at: string;
 }
@@ -58,7 +61,7 @@ export default async function AdminPage() {
       service
         .from("profiles")
         .select(
-          "id, company_name, stripe_subscription_status, is_blocked, created_at"
+          "id, company_name, stripe_subscription_status, stripe_customer_id, stripe_subscription_id, is_blocked, created_at"
         )
         .order("created_at", { ascending: false }),
       service
@@ -132,12 +135,15 @@ export default async function AdminPage() {
     (p) => p.stripe_subscription_status === "trialing"
   ).length;
   const totalSmsSent = transactions.length;
-  const mrr = activeSubscribers * 1199;
+  const mrr = await calculateMrrFromProfiles(profiles);
 
   const summary = [
     { title: "Kunder totalt", value: String(totalCustomers) },
     { title: "Aktiva prenumeranter", value: String(activeSubscribers) },
-    { title: "MRR", value: `${mrr.toLocaleString("sv-SE")} kr` },
+    {
+      title: "MRR",
+      value: `${Math.round(mrr).toLocaleString("sv-SE")} kr`,
+    },
     { title: "Provperioder", value: String(trialingCount) },
     { title: "SMS skickade totalt", value: String(totalSmsSent) },
   ];

@@ -31,7 +31,7 @@ const STEPS = [
     emoji: "⭐",
     title: "Kunden betygsätter",
     description:
-      "Kunden klickar på länken och lämnar sitt betyg på 30 sekunder. Inga konton, ingen krångel.",
+      "Kunden klickar på länken och lämnar sitt betyg på 30 sekunder. Inga konton, inget krångel.",
   },
   {
     number: 3,
@@ -94,8 +94,8 @@ export default function LandingPage() {
             }}
           />
           <div className="relative mx-auto max-w-6xl px-4 py-20 text-center md:py-28">
-            <h1 className="mx-auto max-w-4xl text-balance text-5xl font-bold tracking-tight text-foreground md:text-6xl">
-              Fler Google-recensioner. På autopilot.
+            <h1 className="mx-auto max-w-4xl text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              {"Fler Google\u2011recensioner. På autopilot."}
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
               Skicka ett SMS efter varje jobb – kunden betygsätter med ett klick.
