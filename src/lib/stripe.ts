@@ -49,6 +49,25 @@ export interface ProfileStripeBilling {
   stripe_subscription_id: string | null;
 }
 
+function getSubscriptionCoupon(
+  subscription: Stripe.Subscription
+): Stripe.Coupon | null {
+  const discounts = (subscription as { discounts?: unknown[] }).discounts;
+  if (discounts?.length) {
+    const first = discounts[0];
+    if (typeof first === "object" && first !== null && "coupon" in first) {
+      const coupon = (first as { coupon?: Stripe.Coupon | string }).coupon;
+      if (coupon && typeof coupon !== "string") {
+        return coupon;
+      }
+    }
+  }
+
+  const legacy = (subscription as { discount?: { coupon?: Stripe.Coupon } })
+    .discount?.coupon;
+  return legacy ?? null;
+}
+
 export function getSubscriptionMrrAmount(
   subscription: Stripe.Subscription
 ): number {
@@ -66,7 +85,7 @@ export function getSubscriptionMrrAmount(
     amount = amount / (12 * intervalCount);
   }
 
-  const coupon = subscription.discount?.coupon;
+  const coupon = getSubscriptionCoupon(subscription);
   if (coupon?.amount_off) {
     amount = Math.max(0, amount - coupon.amount_off / 100);
   } else if (coupon?.percent_off) {
