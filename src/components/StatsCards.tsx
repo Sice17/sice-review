@@ -49,7 +49,7 @@ export function StatsCards({ transactions }: StatsCardsProps) {
     },
     {
       title: "Google-klick",
-      description: "Kunder som gått vidare till Google",
+      description: "Vidare till Google",
       value: String(googleClicks),
     },
     {
@@ -66,18 +66,13 @@ export function StatsCards({ transactions }: StatsCardsProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       {stats.map((stat) => (
-        <Card key={stat.title}>
+        <Card key={stat.title} className="flex h-full flex-col">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               {stat.title}
             </CardTitle>
-            {"description" in stat && stat.description && (
-              <CardDescription className="text-xs">
-                {stat.description}
-              </CardDescription>
-            )}
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-1 flex-col">
             <p
               className={
                 stat.small
@@ -90,6 +85,11 @@ export function StatsCards({ transactions }: StatsCardsProps) {
                 <Star className="size-5 fill-amber-400 text-amber-400" />
               )}
             </p>
+            {"description" in stat && stat.description && (
+              <CardDescription className="mt-auto pt-2 text-xs">
+                {stat.description}
+              </CardDescription>
+            )}
           </CardContent>
         </Card>
       ))}
