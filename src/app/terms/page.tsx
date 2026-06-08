@@ -54,6 +54,62 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-3">
+            <h2 className="text-xl font-semibold">Återbetalningspolicy</h2>
+            <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+              <li>
+                14 dagars provperiod – ingen debitering sker förrän efter
+                provperioden
+              </li>
+              <li>
+                Ingen återbetalning ges för påbörjad faktureringsperiod (månad
+                eller år)
+              </li>
+              <li>
+                Vid uppsägning behåller kunden tillgång till tjänsten till
+                periodens slut
+              </li>
+              <li>
+                Undantag: om tekniska fel från vår sida omöjliggjort användning
+                av tjänsten hanteras återbetalning från fall till fall –
+                kontakta{" "}
+                <a
+                  href="mailto:info@sicereview.se"
+                  className="text-primary hover:underline"
+                >
+                  info@sicereview.se
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">Ångerrätt</h2>
+            <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+              <li>
+                Enligt distansavtalslagen har konsumenter normalt 14 dagars
+                ångerrätt
+              </li>
+              <li>
+                Genom att aktivera provperioden och börja använda tjänsten
+                godkänner kunden att ångerrätten inte gäller för digitala
+                tjänster som påbörjats
+              </li>
+              <li>
+                Detta är i enlighet med 2 kap. 11 § distansavtalslagen
+              </li>
+              <li>
+                Frågor hanteras via{" "}
+                <a
+                  href="mailto:info@sicereview.se"
+                  className="text-primary hover:underline"
+                >
+                  info@sicereview.se
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <section className="space-y-3">
             <h2 className="text-xl font-semibold">Uppsägning</h2>
             <p className="text-muted-foreground">
               Du kan avsluta din prenumeration när som helst via kundportalen i
