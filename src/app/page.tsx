@@ -226,49 +226,99 @@ export default function LandingPage() {
 
         {/* Pricing */}
         <section className="py-16 md:py-20">
-          <div className="mx-auto max-w-md px-4">
-            <Card className="border-t-4 border-t-primary">
-              <CardHeader className="text-center">
-                <Badge className="mx-auto w-fit bg-[#052e16] text-[#16a34a] hover:bg-[#052e16]">
-                  14 dagars gratis provperiod
+          <div className="mx-auto max-w-4xl px-4">
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card className="border-t-4 border-t-primary">
+                <CardHeader className="text-center">
+                  <Badge className="mx-auto w-fit bg-[#052e16] text-[#16a34a] hover:bg-[#052e16]">
+                    14 dagars gratis provperiod
+                  </Badge>
+                  <CardTitle className="mt-4 text-2xl">Månadsvis</CardTitle>
+                  <CardDescription>
+                    Allt du behöver för att samla recensioner
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 text-center">
+                  <p className="text-4xl font-bold text-foreground">
+                    1 199 kr
+                    <span className="text-base font-normal text-muted-foreground">
+                      /mån ex. moms
+                    </span>
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Betala månad för månad. Avsluta när som helst.
+                  </p>
+                  <ul className="space-y-2 text-left text-sm text-muted-foreground">
+                    <li>
+                      <span className="text-primary">✓</span> Obegränsade
+                      SMS-förfrågningar
+                    </li>
+                    <li>
+                      <span className="text-primary">✓</span> Unika
+                      recensionslänkar per kund
+                    </li>
+                    <li>
+                      <span className="text-primary">✓</span> Dashboard med
+                      statistik
+                    </li>
+                    <li>
+                      <span className="text-primary">✓</span> Stripe-fakturering
+                      &amp; kundportal
+                    </li>
+                  </ul>
+                  <Button className="w-full" asChild>
+                    <Link href="/auth/register">Starta gratis provperiod</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="relative border-t-4 border-t-[#16a34a]">
+                <Badge className="absolute -top-3 right-4 bg-[#052e16] text-[#16a34a] hover:bg-[#052e16]">
+                  Bäst värde
                 </Badge>
-                <CardTitle className="mt-4 text-2xl">Professionell</CardTitle>
-                <CardDescription>
-                  Allt du behöver för att samla recensioner
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4 text-center">
-                <p className="text-4xl font-bold text-foreground">
-                  1 199 kr
-                  <span className="text-base font-normal text-muted-foreground">
-                    /mån ex. moms
-                  </span>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Därefter 1 199 kr/mån ex. moms. Avsluta när som helst.
-                </p>
-                <ul className="space-y-2 text-left text-sm text-muted-foreground">
-                  <li>
-                    <span className="text-primary">✓</span> Obegränsade
-                    SMS-förfrågningar
-                  </li>
-                  <li>
-                    <span className="text-primary">✓</span> Unika recensionslänkar
-                    per kund
-                  </li>
-                  <li>
-                    <span className="text-primary">✓</span> Dashboard med statistik
-                  </li>
-                  <li>
-                    <span className="text-primary">✓</span> Stripe-fakturering
-                    &amp; kundportal
-                  </li>
-                </ul>
-                <Button className="w-full" asChild>
-                  <Link href="/auth/register">Starta gratis provperiod</Link>
-                </Button>
-              </CardContent>
-            </Card>
+                <CardHeader className="text-center">
+                  <Badge className="mx-auto w-fit bg-[#052e16] text-[#16a34a] hover:bg-[#052e16]">
+                    14 dagars gratis provperiod
+                  </Badge>
+                  <CardTitle className="mt-4 text-2xl">Årsvis</CardTitle>
+                  <CardDescription>
+                    Samma funktioner – lägre månadskostnad
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 text-center">
+                  <p className="text-4xl font-bold text-foreground">
+                    833 kr
+                    <span className="text-base font-normal text-muted-foreground">
+                      /mån ex. moms
+                    </span>
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Faktureras 9 990 kr/år ex. moms. Du sparar 4 398 kr.
+                  </p>
+                  <ul className="space-y-2 text-left text-sm text-muted-foreground">
+                    <li>
+                      <span className="text-primary">✓</span> Obegränsade
+                      SMS-förfrågningar
+                    </li>
+                    <li>
+                      <span className="text-primary">✓</span> Unika
+                      recensionslänkar per kund
+                    </li>
+                    <li>
+                      <span className="text-primary">✓</span> Dashboard med
+                      statistik
+                    </li>
+                    <li>
+                      <span className="text-primary">✓</span> Stripe-fakturering
+                      &amp; kundportal
+                    </li>
+                  </ul>
+                  <Button className="w-full" asChild>
+                    <Link href="/auth/register">Starta gratis provperiod</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </section>
       </main>

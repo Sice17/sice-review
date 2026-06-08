@@ -152,7 +152,11 @@ export default async function SettingsPage() {
                     {statusBadge.label}
                   </Badge>
                 </div>
-                <BillingButtons status={subscriptionStatus} />
+                <BillingButtons
+                  status={subscriptionStatus}
+                  monthlyPriceId={process.env.STRIPE_PRICE_ID!}
+                  yearlyPriceId={process.env.STRIPE_YEARLY_PRICE_ID!}
+                />
               </CardContent>
             </Card>
 
